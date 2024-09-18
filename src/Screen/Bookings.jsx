@@ -26,12 +26,13 @@ const Bookings = () => {
     const [owerid, setownerid] = useState("");
     const [interval, setInterval] = useState('day');
     const [filterbooking, setfilterbooking] = useState('all');
+    const [selectedownernull, setselectedownernull] = useState('');
     const [selectedOption, setSelectedOption] = useState(null);
     const [Filternumberdata, settfilternumberdata] = useState([]);
     const contacts = [
         { value: '7861003128', label: '7861003128' },
         { value: '+917984066311', label: '+917984066311' },
-        { value: '+917861003128', label: '+917861003128' }
+        { value: '+919724283087', label: '+919724283087' }
     ];
 
     useEffect(() => {
@@ -109,6 +110,7 @@ const Bookings = () => {
 
     const handleChange = async (selectedOption) => {
         setSelectedOption(selectedOption);
+        setselectedownernull('');
         try {
             const token = localStorage.getItem("token");
             const response = await GlobalApi(ShowOwnersAPI, 'POST', null, token);
@@ -134,9 +136,9 @@ const Bookings = () => {
                             settfilternumberdata(filteredNumber);
 
                             if (filteredNumber.length === 0) {
-                                seterrormessage("No records found for the selected owner.");
+                                setselectedownernull("No records found for the selected owner.");
                             } else {
-                                seterrormessage("");
+                                setselectedownernull("");
                             }
                         } else {
                             console.warn("totalBooking is not an array or is undefined");
@@ -250,6 +252,7 @@ const Bookings = () => {
                     <button onClick={() => handlefilterbooking('Pending')} className={filterbooking === 'Pending' ? 'active' : ''}>Pending</button>
                     <button onClick={() => handlefilterbooking('Rejected')} className={filterbooking === 'Rejected' ? 'active' : ''}>Rejected</button>
 
+
                     <div className="mobile-filter">
                         <Select
                             id="mobile"
@@ -274,6 +277,9 @@ const Bookings = () => {
             ) : (
                 <>
                     <div className="table-container">
+                        {selectedOption && selectedownernull && (
+                            <div className="nodatafound">{selectedownernull}</div>
+                        )}
                         <table className='user-data'>
                             <thead>
                                 <tr>
@@ -287,7 +293,6 @@ const Bookings = () => {
                                 </tr>
                             </thead>
                             <tbody>
-
                                 {currentpost && currentpost.length > 0 ? (
                                     currentpost.map((booking) => (
                                         <Singlebooking key={booking._id} booking={booking} />
@@ -301,8 +306,8 @@ const Bookings = () => {
                         </table>
                     </div>
 
-                    {filteredData.length > 0 && (
-                        <Pagination totalpost={filteredData.length}
+                    {combinefilterdata.length > 0 && (
+                        <Pagination totalpost={combinefilterdata.length}
                             postperpage={postperpage} currentpage={currentpage} setcurrentpage={setcurrentpage} />
                     )}
 

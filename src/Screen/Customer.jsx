@@ -90,11 +90,13 @@ const Customer = () => {
                             <table className='user-data'>
                                 <thead>
                                     <tr >
-                                        <th scope="col">User Name</th>
-                                        <th scope="col">Country</th>
-                                        <th scope="col">Phone No.</th>
-                                        <th scope="col">Subject</th>
-                                        <th scope="col">Status</th>
+                                        <th scope="col">first_name</th>
+                                        <th scope="col">last_name</th>
+                                        <th scope="col">mobile</th>
+                                        <th scope="col">usertype</th>
+                                        <th scope="col">noofbooking</th>
+                                        <th scope="col">noofownedgrounds</th>
+                                        <th scope="col">noofbooking</th>
                                         <th scope="col">Created Date</th>
 
                                     </tr>
@@ -110,7 +112,6 @@ const Customer = () => {
                                             <p>no data found</p>
                                         </div>
                                     )}
-
                                 </tbody>
                             </table >
                         </div>

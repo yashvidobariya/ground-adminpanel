@@ -25,7 +25,7 @@ const Users = () => {
     const [enddate, setEnddate] = useState('');
 
     const { filteredData, searchValue, setSearchValue, selectedDate, setSelectedDate } = useFilterData(userdata);
-
+    console.log("1");
     const lastpostindex = useMemo(() => currentpage * postperpage, [currentpage, postperpage]);
     const firstpostindex = useMemo(() => lastpostindex - postperpage, [lastpostindex, postperpage]);
     const currentpost = useMemo(() => {
@@ -66,7 +66,6 @@ const Users = () => {
         };
         fetchData();
     }, []);
-
 
 
     useEffect(() => {

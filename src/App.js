@@ -28,6 +28,8 @@ import Setting from './Screen/Setting';
 import Venue from './Screen/Venue';
 import Bookingdetails from './Details/Bookingdetails';
 import Custmoredetails from './Details/Custmoredetails';
+import Coupon from './Screen/Coupon';
+import Ownersendrequest from './Screen/Ownersendrequest';
 
 function App() {
   return (
@@ -64,6 +66,8 @@ function App() {
             <Route path='/venue/edit/:userId' element={<Protected element={<SingleeditGroundlist />} />} />
             <Route path='/venue/addground' element={<Protected element={<AddGround />} />} />
             <Route path='/customer/customerdetails/:ticketId' element={<Protected element={<Custmoredetails />} />} />
+            <Route path='/coupon' element={<Protected element={<Coupon />} />} />
+            <Route path='/ownersendrequest' element={<Protected element={<Ownersendrequest />} />} />
           </Routes>
         </div>
       </BrowserRouter>

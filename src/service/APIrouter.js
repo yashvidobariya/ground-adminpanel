@@ -46,6 +46,11 @@ const Yearlyusergrowth = `${baseURL}/yearlyusergrowth`;
 const Weeklyusergrowth = `${baseURL}/weeklyusergrowth`;
 const Monthlyusergrowth = `${baseURL}/monthlyusergrowth`;
 const Dailyusergrowth = `${baseURL}/dailyusergrowth`;
+const Pendingreqforproplan = `${baseURL}/pendingreqforproplan`;
+const Getallproowners = `${baseURL}/getallproowners`;
+const Getallcoupon = `${baseURL}/getallcoupon`;
+const Acceptproplan = `${baseURL}/acceptproplan`;
+const Createcoupon = `${baseURL}/createcoupon`;
 
 module.exports = {
     NotificationAPI,
@@ -91,5 +96,10 @@ module.exports = {
     Dailyusergrowth,
     Weeklyusergrowth,
     Monthlyusergrowth,
-    Yearlyusergrowth
+    Yearlyusergrowth,
+    Pendingreqforproplan,
+    Getallproowners,
+    Getallcoupon,
+    Acceptproplan,
+    Createcoupon
 };

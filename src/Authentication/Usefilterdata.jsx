@@ -53,18 +53,18 @@ const useFilterData = (props) => {
 
     useEffect(() => {
         let filtered = props;
-
+        console.log("2");
         if (filtered.length > 0) {
             if (selectedDate) {
                 console.log("Filtering by date:", selectedDate);
                 filtered = filterByDate(filtered, selectedDate);
             }
             if (searchValue) {
+                console.log("3");
                 console.log("Filtering by search value:", searchValue);
                 filtered = filterBySearch(filtered, searchValue);
             }
         }
-
         console.log("Filtered data:", filtered);
         setFilteredData(filtered);
     }, [props, selectedDate, searchValue]);

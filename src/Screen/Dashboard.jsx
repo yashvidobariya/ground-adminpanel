@@ -3,10 +3,10 @@ import '../style/Index.css';
 import { ScatterChart, Scatter, LineChart, BarChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { GlobalApi } from '../service/GlobalApi';
 import { Adminshowuseractivity, Averagebookingvalue, Bookingvalue, Dailyusergrowth, Monthlyusergrowth, Revenuegrowth, ShowUsersAPI, Totalbooking, Totalrevenue, Usergrowth, Weeklyusergrowth, Yearlyusergrowth } from '../service/APIrouter';
-import Sidebar from '../Component/Sidebar';
 import loadingdata from '../Data/Playturf.json';
 import Lottie from 'lottie-react';
 import { format, startOfWeek } from 'date-fns';
+import Sidebar from '../Component/Sidebar';
 
 const Dashboard = () => {
     const [dashboaddata, setdashboaddata] = useState(null);
@@ -27,6 +27,7 @@ const Dashboard = () => {
     const [selectedInterval, setSelectedInterval] = useState('day');
     const [start_date, setStartdate] = useState('');
     const [end_date, setEnddate] = useState('');
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -95,8 +96,6 @@ const Dashboard = () => {
 
         fetchData();
     }, []);
-
-
 
     const fetchUserGrowth = async (apiEndpoint, setterFunction, start_date = '', end_date = '') => {
         try {

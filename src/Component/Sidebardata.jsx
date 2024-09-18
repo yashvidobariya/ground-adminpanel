@@ -1,15 +1,17 @@
 import React from 'react'
 import { IoHomeSharp } from "react-icons/io5";
-import { FaUsers } from "react-icons/fa6";
+import { FaUserLarge, FaUsers } from "react-icons/fa6";
 import { RiCustomerService2Fill } from "react-icons/ri";
 import { GoStarFill } from "react-icons/go";
 import { IoNotifications } from "react-icons/io5";
+import { MdOutlineSendTimeExtension } from "react-icons/md";
 import { GiReceiveMoney } from "react-icons/gi";
 import { SiEventstore } from "react-icons/si";
 import { SiHatenabookmark } from "react-icons/si";
 import { GrDocumentPerformance } from "react-icons/gr";
 import { SiBaremetrics } from "react-icons/si";
 import { IoSettingsOutline } from "react-icons/io5";
+import { GiTicket } from "react-icons/gi";
 
 export const Sidebardata = [
     {
@@ -32,13 +34,18 @@ export const Sidebardata = [
         icon: <SiEventstore />,
         link: "/Venue"
     },
+    {
+        title: "Coupon",
+        icon: <GiTicket />,
+        link: "/coupon"
+    },
+    {
+        title: "owner send request",
+        icon: <MdOutlineSendTimeExtension />,
+        link: "/ownersendrequest"
+    },
     // {
-    //     title: "Owners",
-    //     icon: <FaUserLarge />,
-    //     link: "/owners"
-    // },
-    // {
-    //     title: "Review and rating",
+    //     title: "owner send request",
     //     icon: <GoStarFill />,
     //     link: "/reviewandrating"
     // },

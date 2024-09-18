@@ -143,35 +143,6 @@ const Venue = () => {
         navigate('/venue/addground');
     })
 
-
-    const processUserData = (data, key) => {
-        if (!Array.isArray(data)) {
-            console.error("Data is not an array:", data);
-            return {};
-        }
-
-        const intervals = {
-            day: {},
-            week: {},
-            month: {},
-            year: {}
-        };
-
-        data.forEach((item) => {
-            const date = new Date(item.createdat || item.date);
-            const dayKey = format(date, 'dd MMM yyyy');
-            const weekKey = format(getStartOfWeek(date), 'dd MMM yyyy');
-            const monthKey = format(date, 'MMM yyyy');
-            const yearKey = format(date, 'yyyy');
-
-            intervals.day[dayKey] = (intervals.day[dayKey] || 0) + (item.active || 1);
-            intervals.week[weekKey] = (intervals.week[weekKey] || 0) + (item.active || 1);
-            intervals.month[monthKey] = (intervals.month[monthKey] || 0) + (item.active || 1);
-            intervals.year[yearKey] = (intervals.year[yearKey] || 0) + (item.active || 1);
-        });
-        return intervals[key];
-    };
-
     if (errormessage) {
         return <div className='autherror'><h1>{errormessage}</h1></div>;
     }
@@ -256,13 +227,6 @@ const Venue = () => {
                         </div>
                     </>
                 )}
-            </div>
-
-            <div className="user-chart-button">
-                <button onClick={() => handleIntervalChange('day')} className={interval === 'day' ? 'active' : ''}>Day</button>
-                <button onClick={() => handleIntervalChange('week')} className={interval === 'week' ? 'active' : ''}>Week</button>
-                <button onClick={() => handleIntervalChange('month')} className={interval === 'month' ? 'active' : ''}>Month</button>
-                <button onClick={() => handleIntervalChange('year')} className={interval === 'year' ? 'active' : ''}>Year</button>
             </div>
             <div className="user-chart-section">
                 <div className="user-chart-content">
