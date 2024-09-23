@@ -51,6 +51,7 @@ const Ownersendrequest = () => {
                     } else if (Array.isArray(response.data.proOwners)) {
                         const normalizedData = response.data.proOwners.map(owner => ({
                             _id: owner._id,
+                            ownerId: owner.ownerId,
                             first_name: owner.ownerId.first_name || '',
                             last_name: owner.ownerId.last_name || '',
                             mobile: owner.ownerId.mobile || '',
@@ -85,6 +86,15 @@ const Ownersendrequest = () => {
     const lastpostindex = currentpage * postperpage;
     const firstpostindex = lastpostindex - postperpage;
     const currentpost = Array.isArray(filteredData) ? filteredData.slice(firstpostindex, lastpostindex) : [];
+
+    const updateOwnerStatus = (ownerId) => {
+        setuserdata(prevData => prevData.filter(owner => owner.ownerId && owner.ownerId._id !== ownerId));
+    };
+
+    const updateOwnerStatusremove = (ownerId) => {
+        setuserdata(prevData => prevData.filter(owner => owner._id !== ownerId));
+    };
+
 
     return (
         <div>
@@ -127,7 +137,7 @@ const Ownersendrequest = () => {
                             <th scope="col">Mobile</th>
                             <th scope="col">Email</th>
                             <th scope="col">User Type</th>
-                            {selectedFilter === 'Pending' && <th scope="col">Action</th>}
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,6 +147,8 @@ const Ownersendrequest = () => {
                                     key={proOwners._id}
                                     proOwners={proOwners}
                                     selectedFilter={selectedFilter}
+                                    updateOwnerStatus={updateOwnerStatus}
+                                    updateOwnerStatusremove={updateOwnerStatusremove}
                                 />
                             ))
                         ) : (

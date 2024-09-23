@@ -3,6 +3,7 @@ import Sidebar from '../Component/Sidebar';
 import { GlobalApi } from '../service/GlobalApi';
 import { Createcoupon, Getallcoupon } from '../service/APIrouter';
 import { toast, ToastContainer } from 'react-toastify';
+import { IoAddCircleSharp } from "react-icons/io5";
 
 const Coupon = () => {
     const [coupondata, setcoupondata] = useState([]);
@@ -134,7 +135,12 @@ const Coupon = () => {
             <ToastContainer autoClose={3000} closeOnClick />
             <Sidebar />
             <div>
-                <button onClick={handleCreateButton}>Create Coupon</button>
+                <div className="create-coupan-button">
+                    <p>Create Coupan</p>
+                    <div>
+                        <IoAddCircleSharp onClick={handleCreateButton} className='create-icon' />
+                    </div>
+                </div>
 
                 <div className="coupon-div">
                     {coupondata.length > 0 ? (

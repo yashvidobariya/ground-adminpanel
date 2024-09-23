@@ -51,6 +51,8 @@ const Getallproowners = `${baseURL}/getallproowners`;
 const Getallcoupon = `${baseURL}/getallcoupon`;
 const Acceptproplan = `${baseURL}/acceptproplan`;
 const Createcoupon = `${baseURL}/createcoupon`;
+const Rejectproplan = `${baseURL}/rejectproplan`;
+const Removeproplan = `${baseURL}/removeproplan`;
 
 module.exports = {
     NotificationAPI,
@@ -101,5 +103,7 @@ module.exports = {
     Getallproowners,
     Getallcoupon,
     Acceptproplan,
-    Createcoupon
+    Createcoupon,
+    Rejectproplan,
+    Removeproplan
 };

@@ -30,6 +30,7 @@ import Bookingdetails from './Details/Bookingdetails';
 import Custmoredetails from './Details/Custmoredetails';
 import Coupon from './Screen/Coupon';
 import Ownersendrequest from './Screen/Ownersendrequest';
+import Faq from './Screen/Faq';
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
             <Route path='/customer/customerdetails/:ticketId' element={<Protected element={<Custmoredetails />} />} />
             <Route path='/coupon' element={<Protected element={<Coupon />} />} />
             <Route path='/ownersendrequest' element={<Protected element={<Ownersendrequest />} />} />
+            <Route path='/faqs' element={<Protected element={<Faq />} />} />
           </Routes>
         </div>
       </BrowserRouter>

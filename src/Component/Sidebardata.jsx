@@ -40,7 +40,7 @@ export const Sidebardata = [
         link: "/coupon"
     },
     {
-        title: "owner send request",
+        title: "Owner send request",
         icon: <MdOutlineSendTimeExtension />,
         link: "/ownersendrequest"
     },
@@ -49,6 +49,11 @@ export const Sidebardata = [
     //     icon: <GoStarFill />,
     //     link: "/reviewandrating"
     // },
+    {
+        title: "Faqs",
+        icon: <GoStarFill />,
+        link: "/faqs"
+    },
     {
         title: "Financial Overview",
         icon: <GiReceiveMoney />,
