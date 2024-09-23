@@ -53,6 +53,8 @@ const Acceptproplan = `${baseURL}/acceptproplan`;
 const Createcoupon = `${baseURL}/createcoupon`;
 const Rejectproplan = `${baseURL}/rejectproplan`;
 const Removeproplan = `${baseURL}/removeproplan`;
+const Faqs = `${baseURL}/faqs`;
+const createfaqs = `${baseURL}/faqs`;
 
 module.exports = {
     NotificationAPI,
@@ -105,5 +107,7 @@ module.exports = {
     Acceptproplan,
     Createcoupon,
     Rejectproplan,
-    Removeproplan
+    Removeproplan,
+    Faqs,
+    createfaqs
 };
