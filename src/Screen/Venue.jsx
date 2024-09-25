@@ -111,32 +111,32 @@ const Venue = () => {
     }, [])
     console.log("Underperforming", underperforming);
 
-    useEffect(() => {
-        const fetchdata = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await GlobalApi(Topperforming, 'POST', null, token);
+    // useEffect(() => {
+    //     const fetchdata = async () => {
+    //         try {
+    //             const token = localStorage.getItem('token');
+    //             const response = await GlobalApi(Topperforming, 'POST', null, token);
 
-                if (response.status == 401) {
-                    seterrormessage('Authentication error, please login again.');
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userdata');
-                } else if (response.data.message === "No one ground in topperforming.") {
-                    setTopPerformingMessage(response.data.message);
-                } else if (Array.isArray(response.data)) {
-                    settopperforming(response.data);
-                } else {
-                    console.error('User data not fetched', response.data);
-                }
-            } catch (error) {
-                console.error('Error', error);
-            } finally {
-                setloading(false);
-            }
-        };
-        fetchdata();
-    }, []);
-    console.log("topperforming", topperforming);
+    //             if (response.status == 401) {
+    //                 seterrormessage('Authentication error, please login again.');
+    //                 localStorage.removeItem('token');
+    //                 localStorage.removeItem('userdata');
+    //             } else if (response.data.message === "No one ground in topperforming.") {
+    //                 setTopPerformingMessage(response.data.message);
+    //             } else if (Array.isArray(response.data)) {
+    //                 settopperforming(response.data);
+    //             } else {
+    //                 console.error('User data not fetched', response.data);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error', error);
+    //         } finally {
+    //             setloading(false);
+    //         }
+    //     };
+    //     fetchdata();
+    // }, []);
+    // console.log("topperforming", topperforming);
 
 
     const handleadd = (() => {
@@ -259,7 +259,7 @@ const Venue = () => {
 
 
             <div className="user-chart-section">
-
+                {/* 
                 <div className="user-chart-content">
                     {topPerformingMessage ? (
                         <div className='topperforming-message'>{topPerformingMessage}</div>
@@ -277,7 +277,7 @@ const Venue = () => {
                             </ResponsiveContainer>
                         </div>
                     )}
-                </div>
+                </div> */}
 
 
                 <div className="user-chart-content">

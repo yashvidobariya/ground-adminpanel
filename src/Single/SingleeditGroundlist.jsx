@@ -32,7 +32,9 @@ const SingleeditGroundlist = () => {
         price: [
             { weekday: '', start_time: '', end_time: '', price: '' },
             { date: '', start_time: '', end_time: '', price: '' }
-        ]
+        ],
+        starttime: '',
+        endtime: ''
     });
 
 
@@ -166,6 +168,8 @@ const SingleeditGroundlist = () => {
                             { weekday: '', start_time: '', end_time: '', price: '' },
                             { date: '', start_time: '', end_time: '', price: '' }
                         ],
+                        starttime: data?.ground.starttime || '',
+                        endtime: data?.ground.endtime || ''
                     });
                     console.log("response", response);
                     setUserData(data);
@@ -269,6 +273,16 @@ const SingleeditGroundlist = () => {
                                         ))}
                                     </div>
                                 )}
+                            </div>
+
+                            <div className="add-list">
+                                <label>Start Time</label>
+                                <input type="time" name='starttime' onChange={handlechange} value={formdata.starttime} />
+                            </div>
+
+                            <div className="add-list">
+                                <label>End Time</label>
+                                <input type="time" name='endtime' onChange={handlechange} value={formdata.endtime} />
                             </div>
 
                         </div>

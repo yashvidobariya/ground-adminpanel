@@ -5,7 +5,7 @@ import { Adminaddground, ShowOwnersAPI } from '../service/APIrouter';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import Select from 'react-select';
-import { IoIosClose } from "react-icons/io";
+
 
 const AddGround = () => {
     const [loading, setLoading] = useState(false);
@@ -83,13 +83,6 @@ const AddGround = () => {
         }
     };
 
-    const formatTime = (time) => {
-        if (time) {
-            return `${time}:00`;
-        }
-        return time;
-    };
-
 
     const handlechange = async (e) => {
         const { name, value, files } = e.target;
@@ -149,35 +142,39 @@ const AddGround = () => {
     };
 
     const handleSubmit = async (e) => {
+        console.log("submit")
         e.preventDefault();
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
-
-            // Format starttime and endtime before sending
-            const formattedStartTime = formatTime(formdata.starttime);
-            const formattedEndTime = formatTime(formdata.endtime);
-
             const formDataToSend = new FormData();
-            const updatedFormdata = {
-                ...formdata,
-                starttime: formattedStartTime,
-                endtime: formattedEndTime
+
+            const convertToISOTime = (time) => {
+                const today = new Date(); // Use the current date
+                const [hours, minutes] = time.split(':');
+                today.setHours(hours, minutes, 0, 0); // Set hours, minutes, and reset seconds and milliseconds
+                const isoString = today.toISOString(); // Get full ISO string with date
+                const timePart = isoString.split('T')[1]; // Extract the time part after 'T'
+                return timePart; // Return only the time (HH:mm:ss.sssZ)
             };
 
-            Object.keys(updatedFormdata).forEach(key => {
-                if (Array.isArray(updatedFormdata[key])) {
+            Object.keys(formdata).forEach(key => {
+                if (Array.isArray(formdata[key])) {
                     if (key === 'photos') {
-                        updatedFormdata[key].forEach(file => formDataToSend.append('photos', file));
+                        formdata[key].forEach(file => formDataToSend.append('photos', file));
                     } else {
-                        formDataToSend.append(key, JSON.stringify(updatedFormdata[key]));
+                        formDataToSend.append(key, JSON.stringify(formdata[key]));
                     }
                 } else {
-                    formDataToSend.append(key, updatedFormdata[key]);
+                    formDataToSend.append(key, formdata[key]);
                 }
             });
 
             console.log("formDataToSend", formDataToSend);
+
+            formDataToSend.set('starttime', convertToISOTime(formdata.starttime));
+            formDataToSend.set('endtime', convertToISOTime(formdata.endtime));
+
 
             const response = await fetch(Adminaddground, {
                 method: 'POST',
@@ -194,12 +191,12 @@ const AddGround = () => {
                 responsedata = await response.json();
             } else {
                 responsedata = await response.text();
+                console.log("Response Status:", response.status);
+                console.log("Response Data:", responsedata);
             }
 
-            console.log("Response Status:", response.status);
-            console.log("Response Data:", responsedata);
-
             if (response.status === 201) {
+                console.log("success")
                 notify();
             } else {
                 toast.error(`Error: ${response.status}`);
@@ -213,13 +210,13 @@ const AddGround = () => {
     };
 
     const notify = () => {
+        console.log("notify");
         toast.success("Ground added successfully");
-        navigate("/venue");
+        setTimeout(() => {
+            navigate("/venue");
+        }, 3500);
     };
 
-    const handlecancel = () => {
-        navigate('/venue')
-    }
 
     return (
         <>
@@ -234,7 +231,7 @@ const AddGround = () => {
                     <div className="addground-des">
                         <div className="add-list-full">
                             <label>Owner Name</label>
-                            <input type='text' placeholder='Enter Owner name' name='ownername' onChange={handlechange} value={formdata.ownername} />
+                            <input type='text' placeholder='Enter Owner name' name='ownername' onChange={handlechange} value={formdata.ownername || ''} />
                         </div>
 
                         <div className="add-list-full">
@@ -285,7 +282,7 @@ const AddGround = () => {
                             <Select
                                 id="mobile"
                                 name="mobile"
-                                value={selectedOption}
+                                value={selectedOption || ''}
                                 onChange={handleChange}
                                 options={contacts}
                                 placeholder="Select a Contact"
@@ -346,15 +343,13 @@ const AddGround = () => {
                         </div>
 
                         <div className="add-list">
-                            <label>Start Time</label>
                             <input type="time" placeholder="Start_time" name='starttime' onChange={handlechange} value={formdata.starttime} />
+
                         </div>
 
                         <div className="add-list">
-                            <label>End Time</label>
                             <input type="time" name='endtime' onChange={handlechange} value={formdata.endtime} />
                         </div>
-
                     </div>
 
                     <div className="addground-des-price">
@@ -391,9 +386,6 @@ const AddGround = () => {
                         <button onClick={handleSubmit} disabled={loading} className='ground-update'>
                             {loading ? "Adding..." : "Add Ground"}
                         </button>
-                        <div className="cancel-addground">
-                            <button onClick={handlecancel}>Cancel</button>
-                        </div>
                     </div>
                 </div>
             </div >
