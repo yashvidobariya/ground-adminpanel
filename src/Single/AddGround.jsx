@@ -31,7 +31,9 @@ const AddGround = () => {
             { weekday: '', start_time: '', end_time: '', price: '' },
             { date: '', start_time: '', end_time: '', price: '' }
         ],
-        baseprice: ''
+        baseprice: '',
+        starttime: '',
+        endtime: ''
     });
 
     const [selectedOption, setSelectedOption] = useState(null);
@@ -79,6 +81,13 @@ const AddGround = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const formatTime = (time) => {
+        if (time) {
+            return `${time}:00`;
+        }
+        return time;
     };
 
 
@@ -144,17 +153,27 @@ const AddGround = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const formDataToSend = new FormData();
 
-            Object.keys(formdata).forEach(key => {
-                if (Array.isArray(formdata[key])) {
+            // Format starttime and endtime before sending
+            const formattedStartTime = formatTime(formdata.starttime);
+            const formattedEndTime = formatTime(formdata.endtime);
+
+            const formDataToSend = new FormData();
+            const updatedFormdata = {
+                ...formdata,
+                starttime: formattedStartTime,
+                endtime: formattedEndTime
+            };
+
+            Object.keys(updatedFormdata).forEach(key => {
+                if (Array.isArray(updatedFormdata[key])) {
                     if (key === 'photos') {
-                        formdata[key].forEach(file => formDataToSend.append('photos', file));
+                        updatedFormdata[key].forEach(file => formDataToSend.append('photos', file));
                     } else {
-                        formDataToSend.append(key, JSON.stringify(formdata[key]));
+                        formDataToSend.append(key, JSON.stringify(updatedFormdata[key]));
                     }
                 } else {
-                    formDataToSend.append(key, formdata[key]);
+                    formDataToSend.append(key, updatedFormdata[key]);
                 }
             });
 
@@ -320,6 +339,16 @@ const AddGround = () => {
                                     </div>
                                 ))
                             )}
+                        </div>
+
+                        <div className="add-list">
+                            <label>Start Time</label>
+                            <input type="time" placeholder="Start_time" name='starttime' onChange={handlechange} value={formdata.starttime} />
+                        </div>
+
+                        <div className="add-list">
+                            <label>End Time</label>
+                            <input type="time" name='endtime' onChange={handlechange} value={formdata.endtime} />
                         </div>
 
                     </div>
