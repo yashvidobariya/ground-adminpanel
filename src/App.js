@@ -31,7 +31,7 @@ import Custmoredetails from './Details/Custmoredetails';
 import Coupon from './Screen/Coupon';
 import Ownersendrequest from './Screen/Ownersendrequest';
 import Faq from './Screen/Faq';
-import Singlefaqsdetails from './Single/Singlefaqsdetails';
+import Faqsdetails from './Details/Faqsdetails';
 
 
 function App() {
@@ -72,7 +72,7 @@ function App() {
             <Route path='/coupon' element={<Protected element={<Coupon />} />} />
             <Route path='/ownersendrequest' element={<Protected element={<Ownersendrequest />} />} />
             <Route path='/faqs' element={<Protected element={<Faq />} />} />
-            <Route path='/faqs/faqsdetails/:faqid' element={<Protected element={<Singlefaqsdetails />} />} />
+            <Route path='/faqs/faqsdetails/:faqid' element={<Protected element={<Faqsdetails />} />} />
           </Routes>
         </div>
       </BrowserRouter>

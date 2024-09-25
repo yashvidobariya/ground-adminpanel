@@ -167,61 +167,70 @@ const Coupon = () => {
                     <div className="popup">
                         <div className="popup-content">
                             <h2>Create a New Coupon</h2>
-                            <div>
-                                <label>Coupon Code:</label>
-                                <input
-                                    type="text"
-                                    name="code"
-                                    value={newCoupon.code}
-                                    onChange={handleInputChange}
-                                />
+                            <div className="coupon-specifice">
+                                <div>
+                                    <label>Coupon Code:</label>
+                                    <input
+                                        type="text"
+                                        name="code"
+                                        value={newCoupon.code}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Discount Type:</label>
+                                    <select
+                                        name="discountType"
+                                        value={newCoupon.discountType}
+                                        onChange={handleInputChange}
+                                    >
+                                        <option value="Percentage">Percentage</option>
+                                        <option value="Fixed">Fixed</option>
+                                    </select>
+                                </div>
+
                             </div>
-                            <div>
-                                <label>Discount Type:</label>
-                                <select
-                                    name="discountType"
-                                    value={newCoupon.discountType}
-                                    onChange={handleInputChange}
-                                >
-                                    <option value="Percentage">Percentage</option>
-                                    <option value="Fixed">Fixed</option>
-                                </select>
+                            <div className="coupon-specifice">
+                                <div>
+                                    <label>Discount Value:</label>
+                                    <input
+                                        type="number"
+                                        name="discountValue"
+                                        value={newCoupon.discountValue}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label>Max Discount:</label>
+                                    <input
+                                        type="number"
+                                        name="maxDiscount"
+                                        value={newCoupon.maxDiscount}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <label>Discount Value:</label>
-                                <input
-                                    type="number"
-                                    name="discountValue"
-                                    value={newCoupon.discountValue}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label>Max Discount:</label>
-                                <input
-                                    type="number"
-                                    name="maxDiscount"
-                                    value={newCoupon.maxDiscount}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label>Usage Limit:</label>
-                                <input
-                                    type="number"
-                                    name="usageLimit"
-                                    value={newCoupon.usageLimit}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label>Expiry Date:</label>
-                                <input
-                                    type="date"
-                                    name="expiryDate"
-                                    value={newCoupon.expiryDate}
-                                    onChange={handleInputChange}
-                                />
+
+                            <div className="coupon-specifice">
+                                <div>
+                                    <label>Usage Limit:</label>
+                                    <input
+                                        type="number"
+                                        name="usageLimit"
+                                        value={newCoupon.usageLimit}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Expiry Date:</label>
+                                    <input
+                                        type="date"
+                                        name="expiryDate"
+                                        value={newCoupon.expiryDate}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
                             </div>
                             <div>
                                 <label>Applicable To:</label>
@@ -234,10 +243,11 @@ const Coupon = () => {
                                     <option value="specific">Specific</option>
                                 </select>
                             </div>
+                            <label>Select Grounds:</label>
                             {newCoupon.applicableTo === 'specific' && (
-                                <div>
-                                    <label>Select Grounds:</label>
-                                    <div>
+                                <div className='coupon-specifice'>
+
+                                    <div className='coupon-specifice-div'>
                                         <label>
                                             <input
                                                 type="checkbox"
@@ -248,7 +258,7 @@ const Coupon = () => {
                                             Ground 1
                                         </label>
                                     </div>
-                                    <div>
+                                    <div className='coupon-specifice-div'>
                                         <label>
                                             <input
                                                 type="checkbox"
@@ -259,7 +269,7 @@ const Coupon = () => {
                                             Ground 2
                                         </label>
                                     </div>
-                                    <div>
+                                    <div className='coupon-specifice-div'>
                                         <label>
                                             <input
                                                 type="checkbox"
@@ -270,7 +280,7 @@ const Coupon = () => {
                                             Ground 3
                                         </label>
                                     </div>
-                                    <div>
+                                    <div className='coupon-specifice-div'>
                                         <label>
                                             <input
                                                 type="checkbox"

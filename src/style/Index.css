@@ -58,7 +58,6 @@ a {
     display: flex;
     justify-content: center;
     margin: 20px 0;
-
 }
 
 .sidebarlist {
@@ -1051,7 +1050,7 @@ select {
 }
 
 .ground-det h5 {
-    margin-top: 10px;
+    margin-top: -30px;
     font-weight: 600;
     font-size: 17px;
 }
@@ -1151,6 +1150,7 @@ select {
 .main-profile {
     width: 100%;
     display: flex;
+    margin-top: -40px;
     justify-content: center;
 }
 
@@ -1690,14 +1690,13 @@ select {
 }
 
 
-
-
 /* ==================add-ground=============================== */
 
 .addground-main {
     justify-content: center;
     width: 100%;
     display: flex;
+    margin-top: -60px;
 }
 
 .addground-list {
@@ -2193,27 +2192,38 @@ select {
 
 .popup-content {
     background-color: white;
-    padding: 20px;
+    padding: 30px;
     border-radius: 10px;
-    width: 400px;
+    width: 500px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     z-index: 1001;
 }
 
-.popup-content h2,
+/* .popup-content h2, */
 .popup-content-faqs h2 {
     margin-bottom: 20px;
 }
 
+.coupon-specifice {
+    display: flex;
+    gap: 10px;
+}
+
+.popup-content h2 {
+    margin: 30px 0 50px 0;
+    color: var(--secondary-color);
+    font-size: 32px;
+}
+
 .popup-content div,
 .popup-content-faqs div {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    width: 100%;
 }
 
 .popup-content label,
 .popup-content-faqs label {
     display: block;
-    margin-bottom: 5px;
 }
 
 .popup-content input,
@@ -2236,6 +2246,12 @@ select {
     color: white;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.coupon-specifice-div {
+    text-align: center;
+    align-items: center;
+
 }
 
 .popup-content button:last-child,
@@ -2286,7 +2302,7 @@ body.popup-open {
 .faq-container h2 {
     color: var(--text-color);
     margin-top: 20px;
-    font-weight: 800;
+    font-weight: 700;
     margin-bottom: 50px;
     font-size: 42px;
 }
@@ -2382,7 +2398,67 @@ body.popup-open {
     margin-left: 10px;
 }
 
-/* ==CREATE-FAQS================ */
+.single-faq-details {
+    max-width: 1200px;
+    margin: 0px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.faqs-div {
+    padding: 40px;
+    background-color: white;
+    border-radius: 10px;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.faq-question-details h2 {
+    color: var(--primary-color);
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.faq-question-details h3 {
+    color: var(--secondary-color);
+    font-size: 22px;
+    margin-top: 50px;
+}
+
+.faq-question-details p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.faqsdetails-title p {
+    color: var(--primary-color);
+}
+
+.faqsdetails-title {
+    border-bottom: 1px solid var(--primary-color);
+}
+
+.faqsdetails-title {
+    justify-content: space-between;
+    display: flex;
+    margin-bottom: 0px;
+}
+
+.back-faqsdetails {
+    font-size: 28px;
+    cursor: pointer;
+    margin-left: 205px;
+    color: var(--secondary-color);
+}
+
+/* ==create-faqs================ */
 
 .popup-content-faqs {
     background-color: white;

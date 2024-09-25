@@ -14,38 +14,12 @@ import Lottie from 'lottie-react';
 
 const Faq = () => {
     const [faqs, setFaqs] = useState([]);
-    const [loading, setloading] = useState(true);
-    const [errormessage, seterrormessage] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [errormessage, setErrormessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
-    const [createfaqs, setcreatefaqs] = useState({
-        question: '',
-        answer: ''
-    })
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await GlobalApi(Faqs, 'GET', null, token);
-
-                if (response.status === 401) {
-                    seterrormessage('Authentication error, please login again.');
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userdata');
-                } else if (Array.isArray(response.data)) {
-                    setFaqs(response.data);
-                    console.log("data", response.data)
-                } else {
-                    console.error('User data not fetched', response.data.coupon);
-                }
-            } catch (error) {
-                console.error('Error fetching data', error);
-            } finally {
-                setloading(false);
-            }
-        };
-        fetchData();
-    }, []);
+    const [editFaq, setEditFaq] = useState(null);
+    const [createFaqs, setCreateFaqs] = useState({ question: '', answer: '' });
+    const [refresh, setRefresh] = useState(false);
 
     const toggleFAQ = (index) => {
         setFaqs(faqs.map((faq, i) => {
@@ -57,10 +31,36 @@ const Faq = () => {
         }));
     };
 
-    const handleCreatefaqs = () => {
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await GlobalApi(Faqs, 'GET', null, token);
+
+                if (response.status === 401) {
+                    setErrormessage('Authentication error, please login again.');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userdata');
+                } else if (Array.isArray(response.data)) {
+                    setFaqs(response.data.map(faq => ({ ...faq, isOpen: false })));
+                } else {
+                    console.error('FAQ data not fetched', response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching data', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [refresh]);
+
+    const handleCreateFaqs = () => {
+        setEditFaq(null);
+        setCreateFaqs({ question: '', answer: '' });
         setShowPopup(true);
         document.body.classList.add('popup-open');
-    }
+    };
 
     const handleClosePopup = () => {
         setShowPopup(false);
@@ -69,45 +69,75 @@ const Faq = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setcreatefaqs({ ...createfaqs, [name]: value });
+        setCreateFaqs({ ...createFaqs, [name]: value });
     };
 
 
-    const handlesubmitfaqs = async () => {
+    const handleSubmitFaqs = async () => {
         const token = localStorage.getItem("token");
-        const data = { ...createfaqs };
-        console.log("data", data);
+        const data = { ...createFaqs };
 
         try {
             const response = await GlobalApi(Faqs, 'POST', data, token);
             if (response.status === 201) {
-                notify();
-                console.log("FAQ created successfully", response.data);
-                setFaqs([...faqs, response.data]);
+                toast.success("FAQ created successfully");
+                setCreateFaqs({ question: '', answer: '' });
+                setRefresh(!refresh);
             } else {
                 toast.error(`Error: ${response.status}`);
             }
         } catch (error) {
-            toast.error('Failed to create coupon. Please try again.');
+            toast.error('Failed to create FAQ. Please try again.');
         } finally {
-            setcreatefaqs({
-                question: '',
-                answer: ''
-            })
             handleClosePopup();
         }
-    }
+    };
 
     const notify = () => {
         toast.success("Coupon added successfully");
     };
 
-    const handleeditfaqs = () => {
-        alert("sdfs");
-    }
-    const handledeletefaqs = () => {
-        alert("sdfs");
-    }
+    const handleEditFaqs = (faq) => {
+        setEditFaq(faq);
+        setShowPopup(true);
+        document.body.classList.add('popup-open');
+    };
+
+
+    const handleDeleteFaqs = async (faqid) => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await GlobalApi(`${Faqs}/${faqid}`, 'DELETE', null, token);
+            if (response.status === 200) {
+                toast.success("FAQ deleted successfully");
+                setRefresh(!refresh); // Trigger re-fetch after deletion
+            } else {
+                toast.error(`Error deleting FAQ: ${response.status}`);
+            }
+        } catch (error) {
+            toast.error('Failed to delete FAQ. Please try again.');
+        }
+    };
+
+
+
+    const handleEditSubmit = async () => {
+        const token = localStorage.getItem("token");
+        const data = { ...editFaq };
+
+        try {
+            const response = await GlobalApi(`${Faqs}/${data._id}`, 'POST', data, token);
+            if (response.status === 200) {
+                toast.success("FAQ updated successfully");
+                setRefresh(!refresh); // Trigger re-fetch after update
+                handleClosePopup();
+            } else {
+                toast.error(`Error updating FAQ: ${response.status}`);
+            }
+        } catch (error) {
+            toast.error('Failed to update FAQ. Please try again.');
+        }
+    };
 
     return (
         <>
@@ -126,13 +156,13 @@ const Faq = () => {
                     <div className="faq-question-title">
                         <h2>Frequently Asked Questions</h2>
                         <div className="add-faqs">
-                            <button onClick={handleCreatefaqs}>Add</button>
+                            <button onClick={handleCreateFaqs}>Add</button>
                         </div>
                     </div>
 
                     <div className="faqs">
                         {faqs.map((faq, index) => (
-                            <div key={index} className={`faq ${faq.isOpen ? "open" : ""}`}>
+                            <div key={faq._id} className={`faq ${faq.isOpen ? "open" : ""}`}>
                                 <div className="faq-header">
                                     <div className="faq-question">
                                         {faq.question}
@@ -148,17 +178,17 @@ const Faq = () => {
                                     }}>
                                         {faq.isOpen ? <IoMdClose className="icon-add" /> : <IoMdAdd />}
                                     </div>
-
                                     <div onClick={(e) => {
                                         e.stopPropagation();
-                                        handleeditfaqs(faq);
+                                        handleEditFaqs(faq);
                                     }}>
                                         <MdOutlineEditNote className="edit-faqs" />
                                     </div>
 
+
                                     <div onClick={(e) => {
                                         e.stopPropagation();
-                                        handledeletefaqs(faq.id);
+                                        handleDeleteFaqs(faq._id);
                                     }}>
                                         <RiDeleteBin6Fill className='delete-faqs' />
                                     </div>
@@ -178,14 +208,21 @@ const Faq = () => {
                     {showPopup && (
                         <div className="popup">
                             <div className="popup-content-faqs">
-                                <h2>Create FAQS</h2>
+                                <h2>{editFaq ? "Edit FAQ" : "Create FAQ"}</h2>
                                 <div>
                                     <label>Question</label>
                                     <input
                                         type="text"
                                         name="question"
-                                        value={createfaqs.question}
-                                        onChange={handleInputChange}
+                                        value={editFaq ? editFaq.question : createFaqs.question}
+                                        onChange={(e) => {
+                                            const { name, value } = e.target;
+                                            if (editFaq) {
+                                                setEditFaq({ ...editFaq, [name]: value });
+                                            } else {
+                                                setCreateFaqs({ ...createFaqs, [name]: value });
+                                            }
+                                        }}
                                     />
                                 </div>
 
@@ -194,16 +231,26 @@ const Faq = () => {
                                     <input
                                         type="text"
                                         name="answer"
-                                        value={createfaqs.answer}
-                                        onChange={handleInputChange}
+                                        value={editFaq ? editFaq.answer : createFaqs.answer}
+                                        onChange={(e) => {
+                                            const { name, value } = e.target;
+                                            if (editFaq) {
+                                                setEditFaq({ ...editFaq, [name]: value });
+                                            } else {
+                                                setCreateFaqs({ ...createFaqs, [name]: value });
+                                            }
+                                        }}
                                     />
                                 </div>
 
-                                <button onClick={handlesubmitfaqs}>Submit Coupon</button>
+                                <button onClick={editFaq ? handleEditSubmit : handleSubmitFaqs}>
+                                    {editFaq ? "Update FAQ" : "Submit FAQ"}
+                                </button>
                                 <button onClick={handleClosePopup}>Cancel</button>
                             </div>
                         </div>
                     )}
+
                 </div>
             )}
         </>

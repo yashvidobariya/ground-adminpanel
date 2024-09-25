@@ -5,12 +5,15 @@ import { GlobalApi } from '../service/GlobalApi';
 import { Faqs } from '../service/APIrouter';
 import Lottie from 'lottie-react';
 import loadingdata from '../Data/Playturf.json'
+import { IoArrowBackCircle } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 
-const Singlefaqsdetails = () => {
+const Faqsdetails = () => {
     const { faqid } = useParams();
     const [faqDetails, setFaqDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchFaqDetails = async () => {
@@ -41,32 +44,49 @@ const Singlefaqsdetails = () => {
     if (errorMessage) {
         return <div>{errorMessage}</div>;
     }
-
+    const handleBackClick = () => {
+        navigate(-1); // Go back to the previous page
+    };
 
     return (
         <div>
             <Sidebar />
-            <div className="single-faq-details">
 
-                {loading ? (
-                    <div className="loader">
-                        <div className="loading-icon">
-                            <Lottie animationData={loadingdata} />
-                        </div>
+
+            {loading ? (
+                <div className="loader">
+                    <div className="loading-icon">
+                        <Lottie animationData={loadingdata} />
                     </div>
-                ) : (
-                    faqDetails && (
-                        <>
-                            <h2>FAQ Details</h2>
-                            <h3>Question: {faqDetails.question}</h3>
-                            <p>Answer: {faqDetails.answer}</p>
-                        </>
-                    )
+                </div>
+            ) : (
+                faqDetails && (
+                    <>
+                        <div className='back-faqsdetails' onClick={handleBackClick}>
+                            <IoArrowBackCircle />
+                        </div>
+                        <div className="single-faq-details">
+                            <div className="faqs-div">
+
+                                <div className="faq-question-details">
+
+                                    <div className="faqsdetails-title">
+                                        <h2>FAQs Details</h2>
+                                        <p>{faqDetails.createdat.slice(0, 10)}</p>
+                                    </div>
+
+                                    <h3>Question: {faqDetails.question}</h3>
+                                    <p>Answer: {faqDetails.answer}</p>
+                                </div>
+                            </div>
+                        </div >
+                    </>
                 )
-                }
-            </div>
+            )
+            }
         </div>
+
     )
 }
 
-export default Singlefaqsdetails
+export default Faqsdetails

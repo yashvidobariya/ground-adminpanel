@@ -96,8 +96,8 @@ const Customer = () => {
                                         <th scope="col">usertype</th>
                                         <th scope="col">noofbooking</th>
                                         <th scope="col">noofownedgrounds</th>
-                                        <th scope="col">noofbooking</th>
-                                        <th scope="col">Created Date</th>
+                                        {/* <th scope="col">noofbooking</th>
+                                        <th scope="col">Created Date</th> */}
 
                                     </tr>
                                 </thead>
