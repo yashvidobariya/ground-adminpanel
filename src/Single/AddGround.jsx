@@ -217,6 +217,10 @@ const AddGround = () => {
         navigate("/venue");
     };
 
+    const handlecancel = () => {
+        navigate('/venue')
+    }
+
     return (
         <>
             <ToastContainer autoClose={3000} closeOnClick />
@@ -387,6 +391,9 @@ const AddGround = () => {
                         <button onClick={handleSubmit} disabled={loading} className='ground-update'>
                             {loading ? "Adding..." : "Add Ground"}
                         </button>
+                        <div className="cancel-addground">
+                            <button onClick={handlecancel}>Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div >

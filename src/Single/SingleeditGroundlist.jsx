@@ -138,6 +138,16 @@ const SingleeditGroundlist = () => {
 
                 if (response.status === 200) {
                     const data = response.data;
+
+                    const formattedPrices = data.ground.price.map(priceEntry => {
+                        if (priceEntry.date) {
+                            const formattedDate = new Date(priceEntry.date).toISOString().split('T')[0];
+                            console.log("date", formattedDate);
+                            return { ...priceEntry, date: formattedDate };
+                        }
+                        return priceEntry;
+                    });
+
                     setOldPhotos(data?.ground.photos || []);
                     setformdata({
                         groundname: data?.ground.groundname || '',
@@ -152,7 +162,7 @@ const SingleeditGroundlist = () => {
                         facilities: data?.ground.facilities || [],
                         baseprice: data?.ground.baseprice || '',
                         photos: data?.ground.photos || [],
-                        price: data?.ground.price || [
+                        price: formattedPrices || [
                             { weekday: '', start_time: '', end_time: '', price: '' },
                             { date: '', start_time: '', end_time: '', price: '' }
                         ],
