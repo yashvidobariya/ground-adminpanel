@@ -216,7 +216,6 @@ const Dashboard = () => {
         });
         return intervals[key];
     };
-    ;
 
     if (errormessage) {
         return <div className='autherror'><h1>{errormessage}</h1></div>;

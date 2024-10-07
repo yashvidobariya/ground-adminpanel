@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { CgMoreVerticalO } from 'react-icons/cg';
 import { GlobalApi } from '../service/GlobalApi';
-import { UpdateTicketStatus } from '../service/APIrouter';
+import { Adminresponsetime, UpdateTicketStatus } from '../service/APIrouter';
 
 const Singlecustomer = ({ ticket }) => {
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ const Singlecustomer = ({ ticket }) => {
                     />
                     <span>{ticket.name}</span>
                 </td>
-                <td className='user-div'>USA</td>
+                {/* <td className='user-div'>USA</td> */}
                 <td className='user-div'>{ticket.mobile_no ? ticket.mobile_no : "-"}</td>
                 <td className='user-div'>
                     {ticket.subject} &nbsp;
@@ -62,7 +62,7 @@ const Singlecustomer = ({ ticket }) => {
                     </button>
                 </td>
                 <td className='user-div'>
-                    {ticket.createdat?.slice(1, 10)}{" "}
+                    {ticket.createdat?.slice(1, 27)}{" "}
                 </td>
             </tr >
         </>

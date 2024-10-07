@@ -12,7 +12,6 @@ const Singlenotification = ({ notification }) => {
         const data = {
             status: "approved",
             ground: notification.data.ground._id,
-            owner: notification.data.sender._id,
             _id: notification._id,
         };
 
@@ -31,19 +30,16 @@ const Singlenotification = ({ notification }) => {
                 console.error("user not fetch", response.data)
             }
         }
-
         catch (error) {
             console.error(error);
         }
-
     };
 
     const handleReject = async (notification) => {
-        console.log(notification);
+        console.log("notification", notification);
         const data = {
             status: "rejected",
             ground: notification.data.ground._id,
-            owner: notification.data.sender._id,
             _id: notification._id,
         };
 
@@ -88,9 +84,12 @@ const Singlenotification = ({ notification }) => {
                     <td className="approved-reject-btn">
                         {notification.status === "approved" ||
                             notification.status === "rejected" ? (
-                            <button className="approved-btn">
+                            <button
+                                className={`approved-btn ${notification.status === "approved" ? "btn-approved" : "btn-rejected"}`}
+                            >
                                 {notification.status === "approved" ? "Approved" : "Rejected"}
                             </button>
+
                         ) : (
                             <>
                                 <button className="approved-btn" onClick={() => handleApprove(notification)}>

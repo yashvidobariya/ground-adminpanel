@@ -1,6 +1,6 @@
 // const baseURL = "https://groundbackend.herokuapp.com";
 // const baseURL = "https://ground-backend.vercel.app";
-const baseURL = "https://ground-b.vercel.app";
+const baseURL = "https://ground-b.onrender.com";
 
 const NotificationAPI = `${baseURL}/adminnotifications`;
 const RateNReviewAPI = `${baseURL}/adminreviewandrating`;
@@ -55,6 +55,11 @@ const Rejectproplan = `${baseURL}/rejectproplan`;
 const Removeproplan = `${baseURL}/removeproplan`;
 const Faqs = `${baseURL}/faqs`;
 const createfaqs = `${baseURL}/faqs`;
+const useractivity = `${baseURL}/useractivity`;
+const Adminshowaverageresolvedtime = `${baseURL}/adminshowaverageresolvedtime`;
+const Adminshowaverageresponsetime = `${baseURL}/adminshowaverageresponsetime`;
+const Adminresponsetime = `${baseURL}/adminresponsetime`;
+const Adminresolvedtime = `${baseURL}/adminresolvedtime`;
 
 module.exports = {
     NotificationAPI,
@@ -109,5 +114,10 @@ module.exports = {
     Rejectproplan,
     Removeproplan,
     Faqs,
-    createfaqs
+    createfaqs,
+    useractivity,
+    Adminshowaverageresolvedtime,
+    Adminshowaverageresponsetime,
+    Adminresponsetime,
+    Adminresolvedtime
 };

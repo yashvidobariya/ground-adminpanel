@@ -32,6 +32,7 @@ import Coupon from './Screen/Coupon';
 import Ownersendrequest from './Screen/Ownersendrequest';
 import Faq from './Screen/Faq';
 import Faqsdetails from './Details/Faqsdetails';
+import Groundpendingrequest from './Screen/Groundpendingrequest.JSX';
 
 
 function App() {
@@ -73,6 +74,7 @@ function App() {
             <Route path='/ownersendrequest' element={<Protected element={<Ownersendrequest />} />} />
             <Route path='/faqs' element={<Protected element={<Faq />} />} />
             <Route path='/faqs/faqsdetails/:faqid' element={<Protected element={<Faqsdetails />} />} />
+            <Route path='/venue/groundpendingrequest' element={<Protected element={<Groundpendingrequest />} />} />
           </Routes>
         </div>
       </BrowserRouter>

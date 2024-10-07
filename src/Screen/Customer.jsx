@@ -3,7 +3,7 @@ import Sidebar from '../Component/Sidebar'
 import SubHeader from '../Component/SubHeader'
 import useFilterData from '../Authentication/Usefilterdata';
 import { GlobalApi } from '../service/GlobalApi';
-import { Admingetalltickets } from '../service/APIrouter';
+import { Admingetalltickets, Adminshowaverageresolvedtime, Adminshowaverageresponsetime } from '../service/APIrouter';
 import Pagination from '../Dialogbox/Pagination';
 import Lottie from 'lottie-react';
 import loadingdata from '../Data/Playturf.json'
@@ -12,6 +12,8 @@ import Singlecustomer from '../Single/Singlecustomer';
 const Customer = () => {
 
     const [totalticket, settotalticket] = useState([]);
+    const [totalresolvedata, settotalresolvedata] = useState([]);
+    const [totalresponsetime, settotalresponsetime] = useState("");
     const [errormessage, seterrormessage] = useState("");
     const [loading, setloading] = useState(true);
     const [currentpage, setcurrentpage] = useState(1);
@@ -44,6 +46,60 @@ const Customer = () => {
         fetchdata();
     }, [])
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await GlobalApi(Adminshowaverageresolvedtime, 'POST', null, token);
+
+                if (response.status === 200) {
+                    settotalresolvedata(response.data);
+                    console.log("Adminshowaverageresolvedtime", response.data);
+                } else if (response.status === 401) {
+                    seterrormessage("Authentication error. Please login as an Admin.");
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userdata');
+                } else if (response.status === 500) {
+                    seterrormessage("internet server down");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                seterrormessage("An error occurred while fetching data.");
+            } finally {
+                setloading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await GlobalApi(Adminshowaverageresponsetime, 'POST', null, token);
+
+                if (response.status === 200) {
+                    settotalresponsetime(response.data);
+                    console.log("Adminshowaverageresponsetime", response.data);
+                } else if (response.status === 401) {
+                    seterrormessage("Authentication error. Please login as an Admin.");
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userdata');
+                } else if (response.status === 500) {
+                    seterrormessage("internet server down");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                seterrormessage("An error occurred while fetching data.");
+            } finally {
+                setloading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
     const handleDateChange = (date) => {
         setSelectedDate(date);
     };
@@ -72,6 +128,14 @@ const Customer = () => {
                 selectedDate={selectedDate}
                 onDateChange={handleDateChange}
             />
+            <div className="customer-adminshow-time">
+                <div className="resolvetime">
+                    <p>Resolve time {totalresolvedata.averageResolveTime}</p>
+                </div>
+                <div className="response-time">
+                    <p>Response time {totalresponsetime.averageResTime}</p>
+                </div>
+            </div>
             <div className='customer-ticket-button'>
                 <button onClick={() => handleStatusFilter('all')} className={statusFilter === 'all' ? 'active' : ''}  >All</button>
                 <button onClick={() => handleStatusFilter('Pending')} className={statusFilter === 'Pending' ? 'active' : ''} >Pending</button>
@@ -91,13 +155,12 @@ const Customer = () => {
                                 <thead>
                                     <tr >
                                         <th scope="col">first_name</th>
-                                        <th scope="col">last_name</th>
+                                        {/* <th scope="col">last_name</th> */}
                                         <th scope="col">mobile</th>
-                                        <th scope="col">usertype</th>
-                                        <th scope="col">noofbooking</th>
-                                        <th scope="col">noofownedgrounds</th>
-                                        {/* <th scope="col">noofbooking</th>
-                                        <th scope="col">Created Date</th> */}
+                                        <th scope="col">Subject</th>
+                                        <th scope="col">Status</th>
+                                        {/* / <th scope="col">Subject</th> */}
+                                        <th scope="col">Created Date</th>
 
                                     </tr>
                                 </thead>

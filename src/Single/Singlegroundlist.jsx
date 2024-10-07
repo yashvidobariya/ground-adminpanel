@@ -37,10 +37,8 @@ const Singlegroundlist = ({ ground }) => {
         try {
             const token = localStorage.getItem('token');
             const response = await GlobalApi(`${Admindeleteground}/${userId}`, 'POST', null, token);
-
+            notify();
             if (response.status === 200) {
-
-                notify();
             }
             console.log('delete', userId);
         } catch (error) {
@@ -79,7 +77,7 @@ const Singlegroundlist = ({ ground }) => {
                             <div className="allground-delete">
                                 <p onClick={() => {
                                     setIsOpen(true);
-                                    setUserToDelete(ground._id)
+                                    setUserToDelete(ground)
                                 }}><RiDeleteBin6Fill /></p>
                             </div>
                         </div>

@@ -218,6 +218,10 @@ const AddGround = () => {
     };
 
 
+    const handlecancel = () => {
+        navigate('/venue');
+    }
+
     return (
         <>
             <ToastContainer autoClose={3000} closeOnClick />
@@ -343,11 +347,13 @@ const AddGround = () => {
                         </div>
 
                         <div className="add-list">
+                            <label>Ground Start Time</label>
                             <input type="time" placeholder="Start_time" name='starttime' onChange={handlechange} value={formdata.starttime} />
 
                         </div>
 
                         <div className="add-list">
+                            <label>Ground End Time</label>
                             <input type="time" name='endtime' onChange={handlechange} value={formdata.endtime} />
                         </div>
                     </div>
@@ -385,6 +391,10 @@ const AddGround = () => {
                     <div className="addground-submit">
                         <button onClick={handleSubmit} disabled={loading} className='ground-update'>
                             {loading ? "Adding..." : "Add Ground"}
+                        </button>
+
+                        <button onClick={handlecancel} className='cancel-addground'>
+                            Cancel
                         </button>
                     </div>
                 </div>

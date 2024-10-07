@@ -627,6 +627,14 @@ a {
     font-size: 20px;
 }
 
+.histroy-icon {
+    color: rgb(245, 6, 6);
+    padding-left: 2rem;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+}
+
 .edit-icon {
     color: var(--text-color);
     font-size: 25px;
@@ -750,6 +758,7 @@ a {
     background-color: #e0e0e0 !important;
     height: auto !important;
     color: black;
+    cursor: pointer;
 }
 
 .popup-delete {
@@ -757,6 +766,7 @@ a {
     margin-left: 20px;
     background-color: rgb(231, 38, 38) !important;
     height: auto !important;
+    cursor: pointer;
 }
 
 .popup-box {
@@ -767,6 +777,10 @@ a {
     top: 0;
     left: 0;
     z-index: 30;
+}
+
+.close-icon {
+    cursor: pointer;
 }
 
 .box {
@@ -931,6 +945,7 @@ select {
     background-color: red;
     color: var(--background-color);
 }
+
 
 .approved-btn {
     background-color: var(--secondary-color);
@@ -1642,8 +1657,6 @@ select {
     font-weight: 600;
 }
 
-
-
 .allground-location {
     display: flex;
     justify-content: center;
@@ -1669,6 +1682,27 @@ select {
     text-align: center;
     align-items: center;
     padding: 0 32px;
+}
+
+.ground-main {
+    margin-top: 45px;
+    width: 98%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.venue-pending button {
+    outline: none;
+    cursor: pointer;
+    padding: 10px 16px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 10px;
+    color: var(--secondary-color);
+
+    &:hover {
+        background-color: var(--secondary-color);
+        color: var(--color);
+    }
 }
 
 .groundlist-add {
@@ -1729,6 +1763,8 @@ select {
     display: flex;
     gap: 5px;
 }
+
+
 
 /* .edit-photo {
     display: flex;
@@ -1823,6 +1859,7 @@ select {
     display: flex;
     justify-content: center;
     gap: 20px;
+    margin-top: 50px;
 }
 
 .topperforming-message {
@@ -1851,10 +1888,11 @@ select {
     background-color: var(--secondary-color);
 }
 
-.cancel-addground button {
+.cancel-addground {
     padding: 10px 35px;
     border-radius: 10px;
-    border: none;
+    border: 1px solid var(--secondary-color);
+    background-color: var(--color);
     color: var(--secondary-color);
     display: flex;
     cursor: pointer;
@@ -1908,7 +1946,6 @@ select {
 .add-list1 label {
     display: block;
     margin-bottom: 10px;
-    font-weight: bold;
 }
 
 .add-list1 .react-select__control {
@@ -1949,6 +1986,25 @@ select {
 }
 
 /* ======================customer============================ */
+
+.customer-adminshow-time {
+    display: flex;
+    gap: 20px;
+    padding: 0 15px;
+}
+
+.resolvetime,
+.response-time {
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    color: var(--secondary-color);
+}
+
+.resolvetime p,
+.response-time p {
+    padding: 10px;
+    margin: 0;
+}
 
 .customer-ticket-details {
     width: 100%;
@@ -2012,8 +2068,33 @@ select {
     margin: 50px 0;
 }
 
+.back-ticket {
+    margin: 0 0 10px 75px;
+    font-size: 40px;
+    cursor: pointer;
+    margin-top: -20px;
+    color: var(--secondary-color);
+}
+
+.ticket-button button {
+    border: 1px solid var(--secondary-color);
+    padding: 5px 15px;
+    margin: 10px;
+    color: var(--color);
+    border-radius: 10px;
+}
+
 .text-editor {
     color: var(--secondary-color);
+}
+
+.resolve-button {
+    background-color: var(--secondary-color);
+}
+
+.response-button {
+    background-color: var(--primary-color);
+    border: none !important;
 }
 
 .circle-icon-active button {
@@ -2029,13 +2110,18 @@ select {
     font-weight: bold;
 }
 
-.status-button {
+.status-button,
+.time {
     padding: 5px 10px;
     border: 1px solid transparent;
     border-radius: 5px;
     color: white;
     cursor: pointer;
     outline: none !important;
+}
+
+.time {
+    background-color: var(--secondary-color);
 }
 
 .green-button {
@@ -2478,6 +2564,34 @@ body.popup-open {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     z-index: 1001;
 }
+
+/* ===========history========== */
+
+.popup-content-history {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 650px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+}
+
+.popup-display-main {
+    display: flex;
+    cursor: pointer;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(235, 225, 225);
+}
+
+.popup-display-main h1 {
+    font-size: 24px;
+    color: var(--secondary-color);
+}
+
+.user-activity {
+    padding: 30px;
+}
+
 
 @media screen and (max-width: 500px) {
     .coupon {

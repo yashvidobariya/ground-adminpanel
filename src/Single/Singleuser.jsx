@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
-import { Admindeactivateuser, Adminreactivateuser, DeleteAPI, getUserAPI } from '../service/APIrouter';
+import { Admindeactivateuser, Adminreactivateuser, DeleteAPI, getUserAPI, useractivity } from '../service/APIrouter';
 import { Link, useNavigate } from 'react-router-dom';
-import { RiDeleteBin6Fill } from "react-icons/ri";
+import { RiDeleteBin6Fill, RiH1 } from "react-icons/ri";
 import { CgMoreVerticalO } from "react-icons/cg";
 import Popup from '../Dialogbox/Popup';
 import { MdOutlineEditNote } from "react-icons/md";
 import { GlobalApi } from '../service/GlobalApi';
 import { ToastContainer, toast } from 'react-toastify';
+import { MdHistory } from "react-icons/md";
+import { GrClose } from "react-icons/gr";
 
 const Singleuser = ({ user: initialUser }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [userToDelete, setUserToDelete] = useState(null);
     const navigate = useNavigate();
     const [user, setUser] = useState(initialUser);
+    const [isOpen1, setIsOpen1] = useState(false); // For history popup
+    const [histroy, sethistroy] = useState([]);
 
     const handleDelete = async (userId) => {
         try {
@@ -31,6 +35,17 @@ const Singleuser = ({ user: initialUser }) => {
         setIsOpen(!isOpen);
     };
 
+    const togglePopup1 = () => {
+        setIsOpen1(!isOpen1); // Toggle history popup
+    };
+
+    const notify1 = () => {
+        toast.success("Data deleted successfully", {
+            onClose: () => {
+                window.location.reload();
+            }
+        });
+    }
 
     const notify = () => {
         toast.success("Data deleted successfully", {
@@ -47,7 +62,7 @@ const Singleuser = ({ user: initialUser }) => {
             if (response.status === 200) {
                 setUser(prevUser => ({ ...prevUser, status: "Active" }));
             }
-            console.log("deactive", userId);
+            console.log("deactivated", userId);
         } catch (error) {
             console.error('Error', error);
         }
@@ -60,7 +75,7 @@ const Singleuser = ({ user: initialUser }) => {
             if (response.status === 200) {
                 setUser(prevUser => ({ ...prevUser, status: "Inactive" }));
             }
-            console.log("reactive", userId);
+            console.log("reactivated", userId);
         } catch (error) {
             console.error('Error', error);
         }
@@ -82,6 +97,20 @@ const Singleuser = ({ user: initialUser }) => {
         }
     };
 
+    const handlehistroy = async (userId) => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await GlobalApi(`${useractivity}/${userId}`, 'POST', null, token);
+            if (response.status === 200) {
+                sethistroy(response.data.activities);
+                setIsOpen1(true);
+            }
+            console.log("history", response.data.activities);
+        } catch (error) {
+            console.error('Error', error);
+        }
+    };
+
     return (
         <>
             <ToastContainer autoClose={1000} closeOnClick />
@@ -90,7 +119,7 @@ const Singleuser = ({ user: initialUser }) => {
                     <img
                         className="user-profile-image"
                         src={"/image/avatar.png"}
-                        alt=""
+                        alt="profile"
                     />
                     <span>{user.first_name ? user.first_name + ' ' + user.last_name : "-"}</span>
                 </td>
@@ -100,11 +129,7 @@ const Singleuser = ({ user: initialUser }) => {
 
                 <td className='user-div'>
                     <button
-                        className={
-                            user.status === "Active"
-                                ? "status-button green-button"
-                                : "status-button red-button"
-                        }
+                        className={user.status === "Active" ? "status-button green-button" : "status-button red-button"}
                         onClick={() => {
                             if (user.status === 'Active') {
                                 handledeactivebutton(user._id);
@@ -112,16 +137,16 @@ const Singleuser = ({ user: initialUser }) => {
                                 handlereactivebutton(user._id);
                             }
                         }}
-                    >{user.status === "Active" ? "Deactivate" : "Activate"}</button>
+                    >
+                        {user.status === "Active" ? "Deactivate" : "Activate"}
+                    </button>
                 </td>
                 <td>
                     {user.createdat.slice(0, 10)}{" "}
                 </td>
                 <td>
                     <i className="edit-icon">
-
                         <MdOutlineEditNote onClick={() => handleedit(user._id)} />
-
                     </i>
                     <i
                         onClick={() => {
@@ -130,6 +155,9 @@ const Singleuser = ({ user: initialUser }) => {
                         }}
                         className="trash-icon"
                     ><RiDeleteBin6Fill /></i>
+                    <i className="histroy-icon">
+                        <MdHistory onClick={() => handlehistroy(user._id)} />
+                    </i>
                 </td>
             </tr>
 
@@ -137,39 +165,40 @@ const Singleuser = ({ user: initialUser }) => {
                 <Popup
                     content={
                         <div>
-                            <div>
-
-                                <p style={{ marginTop: "20px", fontSize: "18px" }}> Are you sure you want to delete  {userToDelete.name} data?
-                                </p>
-                            </div>
-
-                            <div>
-                                <button
-                                    onClick={togglePopup}
-                                    className="btn btn-style popup-cancel"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(userToDelete._id)}
-                                    className="btn btn-style popup-delete"
-                                >
-                                    SAVE
-                                </button>
-                            </div>
-
-                        </div >
+                            <p style={{ marginTop: "20px", fontSize: "18px" }}> Are you sure you want to delete {userToDelete.name} data?</p>
+                            <button onClick={togglePopup} className="btn btn-style popup-cancel">Cancel</button>
+                            <button onClick={() => handleDelete(userToDelete._id)} className="btn btn-style popup-delete">SAVE</button>
+                        </div>
                     }
                     handleClose={togglePopup}
                 />
-
             )}
 
+            {isOpen1 && (
+                <div className="popup">
+                    <div className="popup-content-history">
+                        <div className="popup-display-main">
+                            <h1>User Activity</h1>
+                            <GrClose onClick={togglePopup1} />
+                        </div>
 
+                        <div className='user-activity'>
+                            {histroy.length > 0 ? (
+                                histroy.map((item, index) => (
+                                    <div key={index}>
+                                        <p>{item.date}</p>
+                                        <p>{item.description}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No user history found.</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
-
-
 };
 
 export default Singleuser;

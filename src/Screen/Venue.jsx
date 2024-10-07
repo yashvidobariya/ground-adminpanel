@@ -181,6 +181,10 @@ const Venue = () => {
 
     const topgroundcount = topcount(topperforming);
 
+    const handlependingrequest = () => {
+        navigate('/venue/groundpendingrequest')
+    }
+
 
     return (
         <>
@@ -200,15 +204,18 @@ const Venue = () => {
                     </div>
                 ) : (
                     <>
-                        <div className="groundlist-main">
-                            <div className="groundlist-title">
-                                <h1>Ground List</h1>
-                            </div>
-                            <div className="groundlist-add">
-                                <IoIosAdd onClick={handleadd} />
-                            </div>
+                        <div className="ground-main">
 
+                            <div className="groundlist-main">
+                                <div className="groundlist-title">
+                                    <h1>Ground List</h1>
+                                </div>
+                                <div className="groundlist-add">
+                                    <IoIosAdd onClick={handleadd} />
+                                </div>
+                            </div>
                         </div>
+
 
                         <div className="allground-main">
                             {

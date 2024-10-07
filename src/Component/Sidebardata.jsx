@@ -12,6 +12,7 @@ import { GrDocumentPerformance } from "react-icons/gr";
 import { SiBaremetrics } from "react-icons/si";
 import { IoSettingsOutline } from "react-icons/io5";
 import { GiTicket } from "react-icons/gi";
+import { FaQuora } from "react-icons/fa";
 
 export const Sidebardata = [
     {
@@ -51,7 +52,7 @@ export const Sidebardata = [
     // },
     {
         title: "Faqs",
-        icon: <GoStarFill />,
+        icon: <FaQuora />,
         link: "/faqs"
     },
     {
@@ -64,11 +65,11 @@ export const Sidebardata = [
         icon: <RiCustomerService2Fill />,
         link: "/customer"
     },
-    // {
-    //     title: "Notification",
-    //     icon: <IoNotifications />,
-    //     link: "/notification"
-    // },
+    {
+        title: "Notification",
+        icon: <IoNotifications />,
+        link: "/notification"
+    },
     {
         title: "Marketing Performance",
         icon: <GrDocumentPerformance />,

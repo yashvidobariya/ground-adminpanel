@@ -45,7 +45,7 @@ const Faqsdetails = () => {
         return <div>{errorMessage}</div>;
     }
     const handleBackClick = () => {
-        navigate(-1); // Go back to the previous page
+        navigate(-1);
     };
 
     return (
