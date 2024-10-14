@@ -110,7 +110,7 @@ const Faq = () => {
             const response = await GlobalApi(`${Faqs}/${faqid}`, 'DELETE', null, token);
             if (response.status === 200) {
                 toast.success("FAQ deleted successfully");
-                setRefresh(!refresh); // Trigger re-fetch after deletion
+                setRefresh(!refresh);
             } else {
                 toast.error(`Error deleting FAQ: ${response.status}`);
             }
@@ -118,8 +118,6 @@ const Faq = () => {
             toast.error('Failed to delete FAQ. Please try again.');
         }
     };
-
-
 
     const handleEditSubmit = async () => {
         const token = localStorage.getItem("token");
@@ -129,7 +127,7 @@ const Faq = () => {
             const response = await GlobalApi(`${Faqs}/${data._id}`, 'POST', data, token);
             if (response.status === 200) {
                 toast.success("FAQ updated successfully");
-                setRefresh(!refresh); // Trigger re-fetch after update
+                setRefresh(!refresh);
                 handleClosePopup();
             } else {
                 toast.error(`Error updating FAQ: ${response.status}`);

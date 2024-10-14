@@ -44,6 +44,7 @@ const Faqsdetails = () => {
     if (errorMessage) {
         return <div>{errorMessage}</div>;
     }
+
     const handleBackClick = () => {
         navigate(-1);
     };

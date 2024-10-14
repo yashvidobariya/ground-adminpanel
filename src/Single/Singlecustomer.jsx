@@ -1,27 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import { CgMoreVerticalO } from 'react-icons/cg';
-import { GlobalApi } from '../service/GlobalApi';
-import { Adminresponsetime, UpdateTicketStatus } from '../service/APIrouter';
 
 const Singlecustomer = ({ ticket }) => {
     const navigate = useNavigate();
-
-    const handlecustmoredetails = async (ticketId) => {
-        navigate(`/customer/customerdetails/${ticketId}`);
-    }
-
-    // const handleStatusChange = async (ticketId, currentStatus) => {
-    //     const newstatus = currentStatus === 'Pending' ? 'Resolve' : 'Pending';
-    //     console.log("newstatus", newstatus);
-
-    //     try {
-    //         const token = localStorage.getItem("token");
-    //         await GlobalApi(UpdateTicketStatus, 'POST', { ticketId, status: newstatus }, token);
-    //     } catch (error) {
-    //         console.error('Error updating ticket status', error);
-    //     }
-    // };
 
     const handleStatusChange = async (ticketId) => {
         navigate(`/customer/customerdetails/${ticketId}`);

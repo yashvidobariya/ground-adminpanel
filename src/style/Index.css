@@ -1392,6 +1392,7 @@ select {
         width: auto;
         left: 100px;
     }
+
 }
 
 @media screen and (max-width:768px) {
@@ -1492,6 +1493,52 @@ select {
 
     .box {
         width: 100%;
+    }
+
+}
+
+@media screen and (max-width:800px) {
+
+    .home-chart-pie {
+        width: 98%;
+    }
+
+    .home-chart-user,
+    .user-chart-content {
+        width: 98%;
+    }
+
+    .home-chart,
+    .user-chart-section {
+        flex-direction: column;
+    }
+
+    .home-chart-button {
+        display: block;
+    }
+
+    .customer-ticket-button {
+        display: contents;
+    }
+
+}
+
+@media screen and (max-width:500px) {
+    .left {
+        width: 100% !important;
+    }
+
+    .coupon-div {
+        grid-template-columns: 1fr !important;
+        margin: 10px 20px !important;
+    }
+
+    .create-coupan-button p {
+        font-size: 24px !important;
+    }
+
+    .create-coupan-button {
+        margin: 0 20px !important;
     }
 }
 
@@ -1730,7 +1777,7 @@ select {
     justify-content: center;
     width: 100%;
     display: flex;
-    margin-top: -60px;
+    margin-top: -30px;
 }
 
 .addground-list {
@@ -1764,7 +1811,14 @@ select {
     gap: 5px;
 }
 
-
+.back-grounddetails {
+    font-size: 28px;
+    cursor: pointer;
+    margin-top: -20px;
+    margin-bottom: 20px;
+    margin-left: 220px;
+    color: var(--secondary-color);
+}
 
 /* .edit-photo {
     display: flex;
@@ -2079,6 +2133,7 @@ select {
 .ticket-button button {
     border: 1px solid var(--secondary-color);
     padding: 5px 15px;
+    cursor: pointer;
     margin: 10px;
     color: var(--color);
     border-radius: 10px;
@@ -2095,6 +2150,7 @@ select {
 .response-button {
     background-color: var(--primary-color);
     border: none !important;
+    cursor: pointer;
 }
 
 .circle-icon-active button {
@@ -2597,6 +2653,7 @@ body.popup-open {
     .coupon {
         display: grid;
         grid-template-columns: 1fr;
+        width: 250px;
     }
 
     .left div {

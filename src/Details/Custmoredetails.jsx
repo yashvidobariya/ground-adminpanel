@@ -6,6 +6,7 @@ import { useParams } from 'react-router';
 import JoditEditor from 'jodit-react';
 import { IoArrowBackCircleSharp } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 const Custmoredetails = () => {
     const [ticketdetails, setticketdetails] = useState([]);
@@ -58,6 +59,7 @@ const Custmoredetails = () => {
                     [userid]: response.data
                 }));
                 console.log("Time data:", response.data);
+                notify1();
             } else {
                 console.error('Failed to fetch response time', response);
             }
@@ -82,6 +84,7 @@ const Custmoredetails = () => {
                     [userid]: response.data
                 }));
                 console.log("Time data:", response.data);
+                notify();
             } else {
                 console.error('Failed to fetch response time', response);
             }
@@ -90,6 +93,17 @@ const Custmoredetails = () => {
         }
     };
 
+    const notify = () => {
+        toast.success("Ticket Resolved successfully", {
+            onClose: () => navigate("/customer")
+        });
+    };
+
+    const notify1 = () => {
+        toast.success("Message send successfully", {
+            onClose: () => navigate("/customer")
+        });
+    };
 
     const handleBackClick = () => {
         navigate(-1);
@@ -99,6 +113,7 @@ const Custmoredetails = () => {
             <Sidebar />
             <div >
                 <IoArrowBackCircleSharp className="back-ticket" onClick={handleBackClick} />
+                <ToastContainer autoClose={1000} closeOnClick />
             </div>
             <div className="customer-ticket-details">
                 <div className="customer-div">
@@ -123,13 +138,13 @@ const Custmoredetails = () => {
                         </div>
 
                         <div className="custmoredetails-title">
-                            <h5>Resolve Time </h5>
-                            <p>{ticketdetails.resolvetime}</p>
+                            <h5>Response time</h5>
+                            <p>{ticketdetails?.responsetime ? ticketdetails.responsetime : '-'}</p>
                         </div>
 
                         <div className="custmoredetails-title">
-                            <h5>Response time</h5>
-                            <p>{ticketdetails.responsetime}</p>
+                            <h5>Response Message</h5>
+                            <p>{ticketdetails?.response ? ticketdetails.response : '-'}</p>
                         </div>
 
                         <JoditEditor ref={editor}

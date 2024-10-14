@@ -1,7 +1,6 @@
 import React from 'react';
 import { GlobalApi } from '../service/GlobalApi';
 import { Acceptproplan, Rejectproplan, Removeproplan } from '../service/APIrouter';
-import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
 const Singleownersendrequest = ({ proOwners, selectedFilter, updateOwnerStatus, updateOwnerStatusremove }) => {
@@ -74,7 +73,7 @@ const Singleownersendrequest = ({ proOwners, selectedFilter, updateOwnerStatus, 
             const response = await GlobalApi(Removeproplan, 'POST', data, token);
             if (response.status === 200) {
                 console.log("remove", ownerId);
-                updateOwnerStatusremove(ownerId); // Call the function to remove the owner
+                updateOwnerStatusremove(ownerId);
             } else {
                 console.error('Failed to remove request:', response.data);
             }
@@ -82,13 +81,6 @@ const Singleownersendrequest = ({ proOwners, selectedFilter, updateOwnerStatus, 
             console.error('Error:', error);
         }
     };
-
-
-
-    // const notify = () => {
-    //     toast.success("Request Rejected successfully");
-    //     navigate('/ownersendrequest');
-    // };
 
     return (
         <>

@@ -3,7 +3,7 @@ import { MdOutlineEditNote } from "react-icons/md";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { GlobalApi } from '../service/GlobalApi';
 import { Admindeleteground, Admineditground } from '../service/APIrouter';
-import { Navigate, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import Popup from '../Dialogbox/Popup';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -27,6 +27,7 @@ const Singlegroundlist = ({ ground }) => {
             console.error('Error', error);
         }
     };
+
 
     const togglePopup = () => {
         setIsOpen(!isOpen);

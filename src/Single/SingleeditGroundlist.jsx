@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router';
 import Lottie from 'lottie-react';
 import loadingdata from '../Data/Playturf.json'
+import { IoArrowBackCircle } from 'react-icons/io5';
 
 const SingleeditGroundlist = () => {
     const [oldPhotos, setOldPhotos] = useState([]);
@@ -15,7 +16,7 @@ const SingleeditGroundlist = () => {
     const navigate = useNavigate();
     const { userId } = useParams();
     const fileInputRef = useRef(null);
-    const [photoIndexToChange, setPhotoIndexToChange] = useState(null);
+    // const [photoIndexToChange, setPhotoIndexToChange] = useState(null);
     const [formdata, setformdata] = useState({
         groundname: '',
         ownername: '',
@@ -197,9 +198,15 @@ const SingleeditGroundlist = () => {
         navigate('/venue');
     });
 
+    const handleBackClick = () => {
+        navigate(-1);
+    };
     return (
         <>
             <Sidebar />
+            <div className='back-grounddetails' onClick={handleBackClick}>
+                <IoArrowBackCircle />
+            </div>
             <ToastContainer autoClose={1000} closeOnClick />
             {loading ? (
                 <div className="loader">

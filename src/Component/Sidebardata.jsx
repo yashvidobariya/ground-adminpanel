@@ -1,8 +1,7 @@
 import React from 'react'
 import { IoHomeSharp } from "react-icons/io5";
-import { FaUserLarge, FaUsers } from "react-icons/fa6";
+import { FaUsers } from "react-icons/fa6";
 import { RiCustomerService2Fill } from "react-icons/ri";
-import { GoStarFill } from "react-icons/go";
 import { IoNotifications } from "react-icons/io5";
 import { MdOutlineSendTimeExtension } from "react-icons/md";
 import { GiReceiveMoney } from "react-icons/gi";

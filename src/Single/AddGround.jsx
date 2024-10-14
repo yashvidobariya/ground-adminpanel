@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Sidebar from '../Component/Sidebar';
 import { GlobalApi } from '../service/GlobalApi';
 import { Adminaddground, ShowOwnersAPI } from '../service/APIrouter';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import Select from 'react-select';
+import { IoArrowBackCircle } from 'react-icons/io5';
 
 
 const AddGround = () => {
@@ -83,7 +84,6 @@ const AddGround = () => {
         }
     };
 
-
     const handlechange = async (e) => {
         const { name, value, files } = e.target;
 
@@ -150,12 +150,12 @@ const AddGround = () => {
             const formDataToSend = new FormData();
 
             const convertToISOTime = (time) => {
-                const today = new Date(); // Use the current date
+                const today = new Date();
                 const [hours, minutes] = time.split(':');
-                today.setHours(hours, minutes, 0, 0); // Set hours, minutes, and reset seconds and milliseconds
-                const isoString = today.toISOString(); // Get full ISO string with date
-                const timePart = isoString.split('T')[1]; // Extract the time part after 'T'
-                return timePart; // Return only the time (HH:mm:ss.sssZ)
+                today.setHours(hours, minutes, 0, 0);
+                const isoString = today.toISOString();
+                const timePart = isoString.split('T')[1];
+                return timePart;
             };
 
             Object.keys(formdata).forEach(key => {
@@ -222,10 +222,17 @@ const AddGround = () => {
         navigate('/venue');
     }
 
+    const handleBackClick = () => {
+        navigate(-1);
+    };
+
     return (
         <>
             <ToastContainer autoClose={3000} closeOnClick />
             <Sidebar />
+            <div className='back-grounddetails' onClick={handleBackClick}>
+                <IoArrowBackCircle />
+            </div>
             <div className="addground-main">
                 <div className="addground-list">
                     <div className="addground-title">

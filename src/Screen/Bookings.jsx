@@ -11,7 +11,6 @@ import loadingdata from '../Data/Playturf.json'
 import { format, startOfWeek } from 'date-fns';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import Select from 'react-select';
-import { all } from 'axios';
 
 
 const Bookings = () => {

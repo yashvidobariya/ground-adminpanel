@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Admindeactivateuser, Adminreactivateuser, DeleteAPI, getUserAPI, useractivity } from '../service/APIrouter';
 import { Link, useNavigate } from 'react-router-dom';
 import { RiDeleteBin6Fill, RiH1 } from "react-icons/ri";
-import { CgMoreVerticalO } from "react-icons/cg";
 import Popup from '../Dialogbox/Popup';
 import { MdOutlineEditNote } from "react-icons/md";
 import { GlobalApi } from '../service/GlobalApi';
@@ -15,7 +14,7 @@ const Singleuser = ({ user: initialUser }) => {
     const [userToDelete, setUserToDelete] = useState(null);
     const navigate = useNavigate();
     const [user, setUser] = useState(initialUser);
-    const [isOpen1, setIsOpen1] = useState(false); // For history popup
+    const [isOpen1, setIsOpen1] = useState(false);
     const [histroy, sethistroy] = useState([]);
 
     const handleDelete = async (userId) => {
@@ -36,16 +35,8 @@ const Singleuser = ({ user: initialUser }) => {
     };
 
     const togglePopup1 = () => {
-        setIsOpen1(!isOpen1); // Toggle history popup
+        setIsOpen1(!isOpen1);
     };
-
-    const notify1 = () => {
-        toast.success("Data deleted successfully", {
-            onClose: () => {
-                window.location.reload();
-            }
-        });
-    }
 
     const notify = () => {
         toast.success("Data deleted successfully", {
