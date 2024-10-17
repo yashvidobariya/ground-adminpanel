@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Admindeactivateuser, Adminreactivateuser, DeleteAPI, getUserAPI, useractivity } from '../service/APIrouter';
-import { Link, useNavigate } from 'react-router-dom';
-import { RiDeleteBin6Fill, RiH1 } from "react-icons/ri";
+import { useNavigate } from 'react-router-dom';
+import { RiDeleteBin6Fill } from "react-icons/ri";
 import Popup from '../Dialogbox/Popup';
 import { MdOutlineEditNote } from "react-icons/md";
 import { GlobalApi } from '../service/GlobalApi';

@@ -1,10 +1,9 @@
 import React from 'react';
 import { GlobalApi } from '../service/GlobalApi';
 import { Acceptproplan, Rejectproplan, Removeproplan } from '../service/APIrouter';
-import { useNavigate } from 'react-router';
+
 
 const Singleownersendrequest = ({ proOwners, selectedFilter, updateOwnerStatus, updateOwnerStatusremove }) => {
-    const navigate = useNavigate();
 
     const handleAcceptClick = async () => {
         try {

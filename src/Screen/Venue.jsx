@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from '../Component/Sidebar'
 import loadingdata from '../Data/Playturf.json'
 import { GlobalApi } from '../service/GlobalApi';
-import { Adminreviewandrating, Topperforming, Totalground, Underperforming } from '../service/APIrouter';
+import { Adminreviewandrating, Totalground, Underperforming } from '../service/APIrouter';
 import Singlegroundlist from '../Single/Singlegroundlist';
 import Lottie from 'lottie-react';
 import { IoIosAdd } from "react-icons/io";
 import { useNavigate } from 'react-router';
-import { format, startOfWeek } from 'date-fns';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { startOfWeek } from 'date-fns';
+import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import Pagination from '../Dialogbox/Pagination';
 import Review from '../Review';
 import SubHeader from '../Component/SubHeader';
@@ -24,10 +24,8 @@ const Venue = () => {
     const [errormessage, seterrormessage] = useState("");
     const [loading, setloading] = useState(true);
     const navigate = useNavigate();
-    const [interval, setInterval] = useState('day');
     const [itemsPerPage] = useState(5);
     const [currentPage, setcurrentpage] = useState(1);
-    const [topPerformingMessage, setTopPerformingMessage] = useState("");
     const { filteredData, searchValue, setSearchValue, selectedDate, setSelectedDate } = useFilterData(totalground);
 
     const handleDateChange = (date) => {
@@ -35,108 +33,59 @@ const Venue = () => {
     };
 
     useEffect(() => {
-        const fetchdata = async () => {
+        const fetchData = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await GlobalApi(Totalground, 'POST', null, token);
 
-                if (response.status == 401) {
+                // First API call: Adminreviewandrating
+                const adminReviewResponse = await GlobalApi(Adminreviewandrating, 'POST', null, token);
+                if (adminReviewResponse.status === 401) {
                     seterrormessage('Authentication error, please login again.');
                     localStorage.removeItem('token');
                     localStorage.removeItem('userdata');
-                } else if (Array.isArray(response.data.ground)) {
-                    settotalground(response.data.ground);
+                    return; // Stop execution if authentication fails
+                } else if (Array.isArray(adminReviewResponse.data.reviews)) {
+                    setadminreviewandrating(adminReviewResponse.data.reviews);
                 } else {
-                    console.error('user data not fetch', response.data);
+                    console.error('Failed to fetch admin reviews', adminReviewResponse.data);
+                    return; // Stop execution if the response is not as expected
                 }
+
+                // Second API call: Underperforming
+                const underperformingResponse = await GlobalApi(Underperforming, 'POST', null, token);
+                if (underperformingResponse.status === 401) {
+                    seterrormessage('Authentication error, please login again.');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userdata');
+                    return; // Stop execution if authentication fails
+                } else if (Array.isArray(underperformingResponse.data.underperformingGrounds)) {
+                    setunderperforming(underperformingResponse.data.underperformingGrounds);
+                } else {
+                    console.error('Failed to fetch underperforming grounds', underperformingResponse.data);
+                    return; // Stop execution if the response is not as expected
+                }
+
+                // Third API call: Totalground
+                const totalGroundResponse = await GlobalApi(Totalground, 'POST', null, token);
+                if (totalGroundResponse.status === 401) {
+                    seterrormessage('Authentication error, please login again.');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userdata');
+                } else if (Array.isArray(totalGroundResponse.data.ground)) {
+                    settotalground(totalGroundResponse.data.ground);
+                } else {
+                    console.error('Failed to fetch total ground data', totalGroundResponse.data);
+                }
+
             } catch (error) {
-                console.error('error', error);
+                console.error('Error:', error);
             } finally {
                 setloading(false);
             }
         };
-        fetchdata();
+
+        fetchData();
     }, []);
-    console.log("totalground", totalground)
-
-
-    useEffect(() => {
-        const fetchdata = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await GlobalApi(Adminreviewandrating, 'POST', null, token);
-
-                if (response.status == 401) {
-                    seterrormessage('Authentication error, please login again.');
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userdata');
-                } else if (Array.isArray(response.data.reviews)) {
-                    setadminreviewandrating(response.data.reviews);
-                } else {
-                    console.error('user data not fetch', response.data);
-                }
-            } catch (error) {
-                console.error('error', error);
-            } finally {
-                setloading(false);
-            }
-        };
-        fetchdata();
-    }, [])
-    console.log("Adminreviewandrating", totalground)
-
-
-    useEffect(() => {
-        const fetchdata = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await GlobalApi(Underperforming, 'POST', null, token);
-
-                if (response.status == 401) {
-                    seterrormessage('Authentication error, please login again.');
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userdata');
-                } else if (Array.isArray(response.data.underperformingGrounds)) {
-                    setunderperforming(response.data.underperformingGrounds);
-                } else {
-                    console.error('user data not fetch', response.data);
-                }
-            } catch (error) {
-                console.error('error', error);
-            } finally {
-                setloading(false);
-            }
-        };
-        fetchdata();
-    }, [])
-    console.log("Underperforming", underperforming);
-
-    // useEffect(() => {
-    //     const fetchdata = async () => {
-    //         try {
-    //             const token = localStorage.getItem('token');
-    //             const response = await GlobalApi(Topperforming, 'POST', null, token);
-
-    //             if (response.status == 401) {
-    //                 seterrormessage('Authentication error, please login again.');
-    //                 localStorage.removeItem('token');
-    //                 localStorage.removeItem('userdata');
-    //             } else if (response.data.message === "No one ground in topperforming.") {
-    //                 setTopPerformingMessage(response.data.message);
-    //             } else if (Array.isArray(response.data)) {
-    //                 settopperforming(response.data);
-    //             } else {
-    //                 console.error('User data not fetched', response.data);
-    //             }
-    //         } catch (error) {
-    //             console.error('Error', error);
-    //         } finally {
-    //             setloading(false);
-    //         }
-    //     };
-    //     fetchdata();
-    // }, []);
-    // console.log("topperforming", topperforming);
 
 
     const handleadd = (() => {
@@ -146,14 +95,6 @@ const Venue = () => {
     if (errormessage) {
         return <div className='autherror'><h1>{errormessage}</h1></div>;
     }
-
-    const getStartOfWeek = (date) => {
-        return startOfWeek(date, { weekStartsOn: 1 });
-    };
-
-    const handleIntervalChange = (interval) => {
-        setInterval(interval);
-    };
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;

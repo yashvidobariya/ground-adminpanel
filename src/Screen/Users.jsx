@@ -25,12 +25,17 @@ const Users = () => {
     const [enddate, setEnddate] = useState('');
 
     const { filteredData, searchValue, setSearchValue, selectedDate, setSelectedDate } = useFilterData(userdata);
-    console.log("1");
+
     const lastpostindex = useMemo(() => currentpage * postperpage, [currentpage, postperpage]);
     const firstpostindex = useMemo(() => lastpostindex - postperpage, [lastpostindex, postperpage]);
+
     const currentpost = useMemo(() => {
-        return Array.isArray(filteredData) ? filteredData.slice(firstpostindex, lastpostindex) : [];
-    }, [filteredData, firstpostindex, lastpostindex]);
+        return Array.isArray(filteredData) && filteredData.length > 0
+            ? filteredData.slice(firstpostindex, lastpostindex)
+            : userdata;
+    }, [filteredData, firstpostindex, lastpostindex, userdata]);
+    console.log("currentpost", currentpost);
+
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
@@ -46,17 +51,52 @@ const Users = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setloading(true);
             try {
                 const token = localStorage.getItem("token");
-                const response = await GlobalApi(ShowUsersAPI, 'POST', null, token);
 
-                if (response.status === 201) {
-                    setuserdata(response.data.users);
-                } else if (response.status === 401) {
+                const userResponse = await GlobalApi(ShowUsersAPI, 'POST', null, token);
+                if (userResponse.status === 201) {
+                    setuserdata(userResponse.data.users);
+                } else if (userResponse.status === 401) {
                     seterrormessage("Authentication error. Please login as an Admin.");
                     localStorage.removeItem('token');
                     localStorage.removeItem('userdata');
                 }
+
+                const activityResponse = await GlobalApi(Adminshowuseractivity, 'POST', null, token);
+                if (activityResponse.status === 200) {
+                    setdashboaddata(activityResponse.data.U_Active);
+                } else if (activityResponse.status === 401) {
+                    seterrormessage("Authentication error. Please login as an Admin.");
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userdata');
+                }
+
+                const churnRateResponse = await GlobalApi(Allchurnrate, 'POST', null, token);
+                if (churnRateResponse.status === 200) {
+                    setallchurnrate(churnRateResponse.data.allChurnRate);
+                } else if (churnRateResponse.status === 401) {
+                    seterrormessage("Authentication error. Please login as an Admin.");
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userdata');
+                }
+
+                if (startdate && enddate) {
+                    const specificChurnRateResponse = await GlobalApi(Churnrate, 'POST', {
+                        periodStart: startdate,
+                        periodEnd: enddate
+                    }, token);
+
+                    if (specificChurnRateResponse.status === 200) {
+                        setchurnrate([{ interval: 'ChurnRate', churnrate: parseFloat(specificChurnRateResponse.data.churnRate) }]);
+                    } else if (specificChurnRateResponse.status === 401) {
+                        seterrormessage("Authentication error. Please login as an Admin.");
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('userdata');
+                    }
+                }
+
             } catch (error) {
                 console.error('Error:', error);
                 seterrormessage("An error occurred while fetching data.");
@@ -65,91 +105,7 @@ const Users = () => {
             }
         };
         fetchData();
-    }, []);
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                const response = await GlobalApi(Adminshowuseractivity, 'POST', null, token);
-
-                if (response.status === 200) {
-                    setdashboaddata(response.data.U_Active);
-                } else if (response.status === 401) {
-                    seterrormessage("Authentication error. Please login as an Admin.");
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userdata');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                seterrormessage("An error occurred while fetching data.");
-            } finally {
-                setloading(false);
-            }
-        };
-        fetchData();
-    }, []);
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                const response = await GlobalApi(Allchurnrate, 'POST', null, token);
-
-                if (response.status === 200) {
-                    setallchurnrate(response.data.allChurnRate);
-                    console.log("allchurnrate", response.data.allChurnRate);
-                } else if (response.status === 401) {
-                    seterrormessage("Authentication error. Please login as an Admin.");
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userdata');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                seterrormessage("An error occurred while fetching data.");
-            } finally {
-                setloading(false);
-            }
-        };
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                const response = await GlobalApi(Churnrate, 'POST', {
-                    periodStart: startdate,
-                    periodEnd: enddate
-                }, token);
-
-                if (response.status === 200) {
-                    setchurnrate([{ interval: 'ChurnRate', churnrate: parseFloat(response.data.churnRate) }]);
-                    console.log("churnrate", response.data.churnRate);
-                } else if (response.status === 401) {
-                    seterrormessage("Authentication error. Please login as an Admin.");
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userdata');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                seterrormessage("An error occurred while fetching data.");
-            } finally {
-                setloading(false);
-            }
-        };
-
-        if (startdate && enddate) {
-            fetchData();
-        } else {
-            setchurnrate(allchurnrate.map(item => ({
-                interval: format(new Date(item.date), 'dd MMM yyyy'),
-                churnrate: item.churnRate
-            })));
-        }
-    }, [startdate, enddate, allchurnrate]);
+    }, [startdate, enddate]);
 
 
     if (errormessage) {
@@ -175,9 +131,6 @@ const Users = () => {
 
         data.forEach((item) => {
             const date = new Date(item.createdat || item.date);
-            const periodStart = new Date(item.periodStart || date);
-            const periodEnd = new Date(item.periodEnd || date);
-
             const dayKey = format(date, 'dd MMM yyyy');
             const weekKey = format(getStartOfWeek(date), 'dd MMM yyyy');
             const monthKey = format(date, 'MMM yyyy');

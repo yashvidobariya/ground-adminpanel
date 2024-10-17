@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../Component/Sidebar'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Revenuegrowth, Totalrevenue } from '../service/APIrouter';
+import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { Revenuegrowth } from '../service/APIrouter';
 import { startOfWeek, format } from 'date-fns';
 import { GlobalApi } from '../service/GlobalApi';
 

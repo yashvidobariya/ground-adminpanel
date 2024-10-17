@@ -167,11 +167,6 @@ const Dashboard = () => {
         handleIntervalClick('day');
     }, []);
 
-    const resetDateSelection = () => {
-        setStartdate('');
-        setEnddate('');
-    };
-
 
     useEffect(() => {
         handleIntervalClick('week');

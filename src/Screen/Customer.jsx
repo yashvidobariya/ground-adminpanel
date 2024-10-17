@@ -19,40 +19,39 @@ const Customer = () => {
     const [currentpage, setcurrentpage] = useState(1);
     const [postperpage] = useState(7);
     const [statusFilter, setStatusFilter] = useState('all');
-
     const { filteredData, searchValue, setSearchValue, selectedDate, setSelectedDate } = useFilterData(totalticket);
-
-    useEffect(() => {
-        const fetchdata = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                const response = await GlobalApi(Admingetalltickets, 'POST', null, token);
-                if (response.status === 401) {
-                    seterrormessage('Authentication error, please login again.');
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userdata');
-                } else if (Array.isArray(response.data.ticket)) {
-                    settotalticket(response.data.ticket);
-                    console.log("totalticket", response.data.ticket)
-                } else {
-                    console.error('user data not fetch', response.data);
-                }
-            } catch (error) {
-                console.error('error', error);
-            } finally {
-                setloading(false);
-            }
-        };
-        fetchdata();
-    }, [])
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const response = await GlobalApi(Adminshowaverageresolvedtime, 'POST', null, token);
+                const response = await GlobalApi(Admingetalltickets, 'POST', null, token);
 
+                if (response.status === 401) {
+                    seterrormessage('Authentication error, please login again.');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userdata');
+                } else if (Array.isArray(response.data.ticket)) {
+                    settotalticket(response.data.ticket);
+                    console.log("totalticket", response.data.ticket);
+
+                    // Call the other APIs only after successfully fetching the tickets
+                    await fetchAverageResolvedTime(token);
+                    await fetchAverageResponseTime(token);
+                } else {
+                    console.error('User data not fetched', response.data);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                setloading(false);
+            }
+        };
+
+        const fetchAverageResolvedTime = async (token) => {
+            try {
+                const response = await GlobalApi(Adminshowaverageresolvedtime, 'POST', null, token);
                 if (response.status === 200) {
                     settotalresolvedata(response.data);
                     console.log("Adminshowaverageresolvedtime", response.data);
@@ -61,25 +60,17 @@ const Customer = () => {
                     localStorage.removeItem('token');
                     localStorage.removeItem('userdata');
                 } else if (response.status === 500) {
-                    seterrormessage("internet server down");
+                    seterrormessage("Internet server down");
                 }
             } catch (error) {
                 console.error('Error:', error);
                 seterrormessage("An error occurred while fetching data.");
-            } finally {
-                setloading(false);
             }
         };
-        fetchData();
-    }, []);
 
-
-    useEffect(() => {
-        const fetchData = async () => {
+        const fetchAverageResponseTime = async (token) => {
             try {
-                const token = localStorage.getItem("token");
                 const response = await GlobalApi(Adminshowaverageresponsetime, 'POST', null, token);
-
                 if (response.status === 200) {
                     settotalresponsetime(response.data);
                     console.log("Adminshowaverageresponsetime", response.data);
@@ -88,17 +79,17 @@ const Customer = () => {
                     localStorage.removeItem('token');
                     localStorage.removeItem('userdata');
                 } else if (response.status === 500) {
-                    seterrormessage("internet server down");
+                    seterrormessage("Internet server down");
                 }
             } catch (error) {
                 console.error('Error:', error);
                 seterrormessage("An error occurred while fetching data.");
-            } finally {
-                setloading(false);
             }
         };
+
         fetchData();
     }, []);
+
 
     const handleDateChange = (date) => {
         setSelectedDate(date);

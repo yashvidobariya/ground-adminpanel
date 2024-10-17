@@ -6,7 +6,6 @@ import { Adminreviewandrating } from '../service/APIrouter'
 import Lottie from 'lottie-react'
 import loadingdata from '../Data/Playturf.json'
 import useFilterData from '../Authentication/Usefilterdata'
-import Pagination from '../Dialogbox/Pagination'
 import Review from '../Review'
 
 const Reviewandrating = () => {

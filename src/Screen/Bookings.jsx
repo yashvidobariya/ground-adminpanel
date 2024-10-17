@@ -38,12 +38,34 @@ const Bookings = () => {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const response = await GlobalApi(Totalbooking, 'POST', null, token);
+                const totalBookingResponse = await GlobalApi(Totalbooking, 'POST', null, token);
 
-                if (response.status === 200) {
-                    settotalbooking(response.data.booking);
-                    console.log("totalbooking", response.data.booking);
-                } else if (response.status === 401) {
+                if (totalBookingResponse.status === 200) {
+                    settotalbooking(totalBookingResponse.data.booking);
+                    console.log("totalbooking", totalBookingResponse.data.booking);
+
+                    // Call Averagebookingvalue API after Totalbooking API is successful
+                    const averageBookingResponse = await GlobalApi(Averagebookingvalue, 'POST', null, token);
+                    if (averageBookingResponse.status === 200) {
+                        settotalavebooking(averageBookingResponse.data.averageBookingValue);
+                        console.log("bookingtreds", averageBookingResponse.data.averageBookingValue);
+
+                        // Call Bookingvalue API after Averagebookingvalue API is successful
+                        const bookingVolumeResponse = await GlobalApi(Bookingvalue, 'POST', null, token);
+                        if (bookingVolumeResponse.status === 200) {
+                            setbookingvolume(bookingVolumeResponse.data.BookingValue);
+                            console.log("bookingvolume", bookingVolumeResponse.data.BookingValue);
+                        } else if (bookingVolumeResponse.status === 401) {
+                            seterrormessage("Authentication error. Please login as an Admin.");
+                            localStorage.removeItem('token');
+                            localStorage.removeItem('userdata');
+                        }
+                    } else if (averageBookingResponse.status === 401) {
+                        seterrormessage("Authentication error. Please login as an Admin.");
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('userdata');
+                    }
+                } else if (totalBookingResponse.status === 401) {
                     seterrormessage("Authentication error. Please login as an Admin.");
                     localStorage.removeItem('token');
                     localStorage.removeItem('userdata');
@@ -55,55 +77,7 @@ const Bookings = () => {
                 setloading(false);
             }
         };
-        fetchData();
-    }, []);
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                const response = await GlobalApi(Averagebookingvalue, 'POST', null, token);
-
-                if (response.status === 200) {
-                    settotalavebooking(response.data.averageBookingValue);
-                    console.log("bookingtreds", response.data.averageBookingValue);
-                } else if (response.status === 401) {
-                    seterrormessage("Authentication error. Please login as an Admin.");
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userdata');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                seterrormessage("An error occurred while fetching data.");
-            } finally {
-                setloading(false);
-            }
-        };
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                const response = await GlobalApi(Bookingvalue, 'POST', null, token);
-
-                if (response.status === 200) {
-                    setbookingvolume(response.data.BookingValue);
-                    console.log("bookingvolume", response.data.BookingValue);
-                } else if (response.status === 401) {
-                    seterrormessage("Authentication error. Please login as an Admin.");
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('userdata');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                seterrormessage("An error occurred while fetching data.");
-            } finally {
-                setloading(false);
-            }
-        };
         fetchData();
     }, []);
 
@@ -287,8 +261,8 @@ const Bookings = () => {
                                     <th scope="col">Details </th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Date</th>
-                                    <th scope="col">Start time</th>
-                                    <th scope="col">end time</th>
+                                    {/* <th scope="col">Start time</th>
+                                    <th scope="col">end time</th> */}
                                 </tr>
                             </thead>
                             <tbody>

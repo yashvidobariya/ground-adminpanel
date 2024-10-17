@@ -3,7 +3,6 @@ import Sidebar from '../Component/Sidebar'
 import { GlobalApi } from '../service/GlobalApi';
 import { Faqs } from '../service/APIrouter';
 import { IoMdAdd, IoMdClose } from "react-icons/io";
-import { useNavigate } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
 import { MdOutlineEditNote } from "react-icons/md";
 import { RiDeleteBin6Fill } from "react-icons/ri";
@@ -15,7 +14,7 @@ import Lottie from 'lottie-react';
 const Faq = () => {
     const [faqs, setFaqs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [errormessage, setErrormessage] = useState("");
+    const [Errormessage, setErrormessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
     const [editFaq, setEditFaq] = useState(null);
     const [createFaqs, setCreateFaqs] = useState({ question: '', answer: '' });
@@ -67,10 +66,10 @@ const Faq = () => {
         document.body.classList.remove('popup-open');
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setCreateFaqs({ ...createFaqs, [name]: value });
-    };
+    // const handleInputChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setCreateFaqs({ ...createFaqs, [name]: value });
+    // };
 
 
     const handleSubmitFaqs = async () => {
@@ -93,9 +92,9 @@ const Faq = () => {
         }
     };
 
-    const notify = () => {
-        toast.success("Coupon added successfully");
-    };
+    // const notify = () => {
+    //     toast.success("Coupon added successfully");
+    // };
 
     const handleEditFaqs = (faq) => {
         setEditFaq(faq);

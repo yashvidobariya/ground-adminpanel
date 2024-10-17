@@ -54,11 +54,9 @@ const Notification = () => {
         fetchdata();
     }, []);
 
-
     if (errormessage) {
         return <div className='autherror'><h1>{errormessage}</h1></div>;
     }
-
 
     const lastpostindex = currentpage * postperpage;
     const firstpostindex = lastpostindex - postperpage;

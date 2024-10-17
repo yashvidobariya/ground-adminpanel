@@ -15,8 +15,6 @@ const SingleeditGroundlist = () => {
     const [loading, setloading] = useState(true);
     const navigate = useNavigate();
     const { userId } = useParams();
-    const fileInputRef = useRef(null);
-    // const [photoIndexToChange, setPhotoIndexToChange] = useState(null);
     const [formdata, setformdata] = useState({
         groundname: '',
         ownername: '',

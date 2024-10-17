@@ -21,10 +21,9 @@ const useFilterData = (props) => {
     };
 
     const filterBySearch = (data, value) => {
-        const lowercaseValue = value.toLowerCase().trim();
-        if (lowercaseValue === "" || data.length === 0) {
-            return data;
-        } else {
+        if (value && Array.isArray(data) && data.length > 0) {
+            const lowercaseValue = value.toLowerCase();
+
             return data.filter((item) => {
                 const message = item.data?.message ? item.data.message.toLowerCase() : "";
                 const firstName = item.first_name ? item.first_name.toLowerCase() : "";
@@ -49,23 +48,25 @@ const useFilterData = (props) => {
                 );
             });
         }
+        return data;
     };
 
     useEffect(() => {
         let filtered = props;
-        console.log("2");
+
         if (filtered.length > 0) {
             if (selectedDate) {
-                console.log("Filtering by date:", selectedDate);
                 filtered = filterByDate(filtered, selectedDate);
             }
             if (searchValue) {
-                console.log("3");
-                console.log("Filtering by search value:", searchValue);
                 filtered = filterBySearch(filtered, searchValue);
             }
         }
-        console.log("Filtered data:", filtered);
+
+        if (!searchValue && !selectedDate) {
+            filtered = props;
+        }
+
         setFilteredData(filtered);
     }, [props, selectedDate, searchValue]);
 

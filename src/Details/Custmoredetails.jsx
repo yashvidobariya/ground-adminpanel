@@ -49,16 +49,20 @@ const Custmoredetails = () => {
             const token = localStorage.getItem("token");
             const strippedContent = content.replace(/<p>/g, '').replace(/<\/p>/g, '');
             const data = { id: userid, response: strippedContent };
-            console.log("Data sent to API:", data);
+
             const response = await GlobalApi(Adminresponsetime, 'POST', data, token);
-            console.log("API Response:", response);
 
             if (response.status === 200) {
                 setresponsetime(prevState => ({
                     ...prevState,
                     [userid]: response.data
                 }));
-                console.log("Time data:", response.data);
+
+                setticketdetails(prevDetails => ({
+                    ...prevDetails,
+                    responsetime: response.data.responsetime
+                }));
+
                 notify1();
             } else {
                 console.error('Failed to fetch response time', response);
@@ -69,29 +73,33 @@ const Custmoredetails = () => {
     };
 
 
-
     const hanleresolvetime = async (userid) => {
         try {
             const token = localStorage.getItem("token");
             const data = { id: userid };
-            console.log("Data sent to API:", data);
+
             const response = await GlobalApi(Adminresolvedtime, 'POST', data, token);
-            console.log("API Response:", response);
 
             if (response.status === 200) {
                 setresolvetime(prevState => ({
                     ...prevState,
                     [userid]: response.data
                 }));
-                console.log("Time data:", response.data);
+
+                setticketdetails(prevDetails => ({
+                    ...prevDetails,
+                    resolvetime: response.data.resolvetime
+                }));
+
                 notify();
             } else {
-                console.error('Failed to fetch response time', response);
+                console.error('Failed to fetch resolve time', response);
             }
         } catch (error) {
             console.error('Error fetching time data', error);
         }
     };
+
 
     const notify = () => {
         toast.success("Ticket Resolved successfully", {

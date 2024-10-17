@@ -1518,7 +1518,7 @@ select {
     }
 
     .customer-ticket-button {
-        display: contents;
+        display: contents !important;
     }
 
 }
@@ -2488,7 +2488,9 @@ body.popup-open {
 .faq-answer {
     margin: 15px 0 10px;
     text-align: left;
+    color: rgb(94, 88, 88);
     font-size: 18px;
+    width: 80%;
 }
 
 .add-faqs button {

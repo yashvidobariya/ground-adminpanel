@@ -6,8 +6,7 @@ import { useNavigate, useParams } from "react-router";
 import Sidebar from "../Component/Sidebar";
 import { GlobalApi } from "../service/GlobalApi";
 import loadingdata from '../Data/Playturf.json'
-import Lottie from 'lottie-react'
-import { StarRating } from "react-star-rating-input";
+import Lottie from 'lottie-react';
 import Review from "../Review";
 
 export default function Ground() {
@@ -38,13 +37,8 @@ export default function Ground() {
         fetchdata();
     }, [userId])
 
-
-
-
     const handlegrounddetails = async (userId) => {
-
         navigate(`/owners/grounddetails/${userId}`);
-
     };
 
 
