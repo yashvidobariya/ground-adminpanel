@@ -32,7 +32,7 @@ const Users = () => {
     const currentpost = useMemo(() => {
         return Array.isArray(filteredData) && filteredData.length > 0
             ? filteredData.slice(firstpostindex, lastpostindex)
-            : userdata;
+            : [];
     }, [filteredData, firstpostindex, lastpostindex, userdata]);
     console.log("currentpost", currentpost);
 
@@ -51,7 +51,6 @@ const Users = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            setloading(true);
             try {
                 const token = localStorage.getItem("token");
 
@@ -162,6 +161,7 @@ const Users = () => {
         setStartdate("");
         setEnddate("");
     }
+
     return (
         <>
             <Sidebar />
@@ -255,7 +255,10 @@ const Users = () => {
                                 <input type='date' value={enddate} onChange={handleEndDateChange} className='enddate' />
                                 <button className='resetchurnrate' onClick={handleresetdate}>Reset</button>
                                 <ResponsiveContainer width="100%" height={350}>
-                                    <LineChart data={churnrate}>
+                                    <LineChart data={(startdate && enddate && churnrate.length > 0) ? churnrate : allchurnrate.map(rate => ({
+                                        interval: rate.data,
+                                        churnrate: parseFloat(rate.churnRate)
+                                    }))}>
                                         <CartesianGrid strokeDasharray="2 2" />
                                         <XAxis dataKey="interval" padding={{ left: 0, right: 0 }} />
                                         <YAxis />

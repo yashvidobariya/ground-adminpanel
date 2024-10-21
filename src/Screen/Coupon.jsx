@@ -41,7 +41,7 @@ const Coupon = () => {
             } catch (error) {
                 console.error('Error fetching data', error);
             } finally {
-                setloading(false);  // Set loading to false after fetching is done
+                setloading(false);
             }
         };
         fetchData();

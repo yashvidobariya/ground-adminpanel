@@ -35,8 +35,6 @@ const Customer = () => {
                 } else if (Array.isArray(response.data.ticket)) {
                     settotalticket(response.data.ticket);
                     console.log("totalticket", response.data.ticket);
-
-                    // Call the other APIs only after successfully fetching the tickets
                     await fetchAverageResolvedTime(token);
                     await fetchAverageResponseTime(token);
                 } else {

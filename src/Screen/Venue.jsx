@@ -37,35 +37,32 @@ const Venue = () => {
             try {
                 const token = localStorage.getItem('token');
 
-                // First API call: Adminreviewandrating
                 const adminReviewResponse = await GlobalApi(Adminreviewandrating, 'POST', null, token);
                 if (adminReviewResponse.status === 401) {
                     seterrormessage('Authentication error, please login again.');
                     localStorage.removeItem('token');
                     localStorage.removeItem('userdata');
-                    return; // Stop execution if authentication fails
+                    return;
                 } else if (Array.isArray(adminReviewResponse.data.reviews)) {
                     setadminreviewandrating(adminReviewResponse.data.reviews);
                 } else {
                     console.error('Failed to fetch admin reviews', adminReviewResponse.data);
-                    return; // Stop execution if the response is not as expected
+                    return;
                 }
 
-                // Second API call: Underperforming
                 const underperformingResponse = await GlobalApi(Underperforming, 'POST', null, token);
                 if (underperformingResponse.status === 401) {
                     seterrormessage('Authentication error, please login again.');
                     localStorage.removeItem('token');
                     localStorage.removeItem('userdata');
-                    return; // Stop execution if authentication fails
+                    return;
                 } else if (Array.isArray(underperformingResponse.data.underperformingGrounds)) {
                     setunderperforming(underperformingResponse.data.underperformingGrounds);
                 } else {
                     console.error('Failed to fetch underperforming grounds', underperformingResponse.data);
-                    return; // Stop execution if the response is not as expected
+                    return;
                 }
 
-                // Third API call: Totalground
                 const totalGroundResponse = await GlobalApi(Totalground, 'POST', null, token);
                 if (totalGroundResponse.status === 401) {
                     seterrormessage('Authentication error, please login again.');
@@ -110,21 +107,6 @@ const Venue = () => {
         return Object.keys(counts).map(key => ({ groundname: key, underperforming: counts[key] }));
     };
     const groundCounts = countGround(underperforming);
-
-
-    const topcount = (data) => {
-        const counts = {};
-        data.forEach(item => {
-            counts[item.groundname] = (counts[item.groundname] || 0) + 1;
-        });
-        return Object.keys(counts).map(key => ({ groundname: key, topperforming: counts[key] }));
-    };
-
-    const topgroundcount = topcount(topperforming);
-
-    const handlependingrequest = () => {
-        navigate('/venue/groundpendingrequest')
-    }
 
 
     return (

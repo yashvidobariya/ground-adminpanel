@@ -15,8 +15,6 @@ export const GlobalApi = async (url, method, data, token) => {
 
     try {
         const response = await fetch(url, request);
-        console.log('Response:', response);
-
         const contentType = response.headers.get('Content-Type');
         let responsedata;
 

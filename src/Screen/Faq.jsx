@@ -66,12 +66,6 @@ const Faq = () => {
         document.body.classList.remove('popup-open');
     };
 
-    // const handleInputChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setCreateFaqs({ ...createFaqs, [name]: value });
-    // };
-
-
     const handleSubmitFaqs = async () => {
         const token = localStorage.getItem("token");
         const data = { ...createFaqs };
@@ -91,10 +85,6 @@ const Faq = () => {
             handleClosePopup();
         }
     };
-
-    // const notify = () => {
-    //     toast.success("Coupon added successfully");
-    // };
 
     const handleEditFaqs = (faq) => {
         setEditFaq(faq);

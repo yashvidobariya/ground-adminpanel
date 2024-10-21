@@ -77,6 +77,7 @@ const Dashboard = () => {
                 }
                 if (totalRevenueResponse.status === 200) {
                     settotalrevenue(totalRevenueResponse.data?.totalRevenue);
+                    console.log("totalrevenue", totalRevenueResponse.data?.totalRevenue);
                 } else {
                     console.log("showusererorr");
                 }
@@ -367,7 +368,7 @@ const Dashboard = () => {
                                         <YAxis />
                                         <Tooltip />
                                         <Legend />
-                                        <Line type="monotone" dataKey="BookingVolume" stroke="#BDE038" fill='#F26835' />
+                                        <Line type="monotone" dataKey="Average BookingVolume" stroke="#BDE038" fill='#F26835' />
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>

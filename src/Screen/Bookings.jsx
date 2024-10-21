@@ -44,13 +44,11 @@ const Bookings = () => {
                     settotalbooking(totalBookingResponse.data.booking);
                     console.log("totalbooking", totalBookingResponse.data.booking);
 
-                    // Call Averagebookingvalue API after Totalbooking API is successful
                     const averageBookingResponse = await GlobalApi(Averagebookingvalue, 'POST', null, token);
                     if (averageBookingResponse.status === 200) {
                         settotalavebooking(averageBookingResponse.data.averageBookingValue);
                         console.log("bookingtreds", averageBookingResponse.data.averageBookingValue);
 
-                        // Call Bookingvalue API after Averagebookingvalue API is successful
                         const bookingVolumeResponse = await GlobalApi(Bookingvalue, 'POST', null, token);
                         if (bookingVolumeResponse.status === 200) {
                             setbookingvolume(bookingVolumeResponse.data.BookingValue);

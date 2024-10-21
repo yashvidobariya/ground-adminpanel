@@ -68,12 +68,6 @@ const Signup = () => {
                 console.log("Signup successful");
                 console.log(data);
 
-                // setformdata({
-                //     name: '',
-                //     email: '',
-                //     mobile: '',
-                //     password: ''
-                // });
             }
         }
         catch (error) {

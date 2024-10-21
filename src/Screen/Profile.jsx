@@ -47,7 +47,6 @@ const Profile = () => {
         <>
             <ToastContainer autoClose={3000} closeOnClick />
             <Sidebar />
-            {/* <Header doNotShowSearch={true} donotcal={true} /> */}
             <div className="main-profile">
                 <div className="profile-div">
                     <div className="profile-img-div">

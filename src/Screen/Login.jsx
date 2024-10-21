@@ -64,10 +64,6 @@ const Login = () => {
                 notify();
                 console.log("login", data);
 
-                // setformdata({
-                //     email: '',
-                //     password: ''
-                // });
             }
 
         } catch (error) {
