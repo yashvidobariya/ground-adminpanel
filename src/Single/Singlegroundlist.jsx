@@ -6,6 +6,9 @@ import { Admindeleteground, Admineditground } from '../service/APIrouter';
 import { useNavigate } from 'react-router';
 import Popup from '../Dialogbox/Popup';
 import { ToastContainer, toast } from 'react-toastify';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 const Singlegroundlist = ({ ground }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -55,14 +58,27 @@ const Singlegroundlist = ({ ground }) => {
         });
     }
 
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        pauseOnHover: true,
+        adaptiveHeight: true,
+    };
+
     return (
         <div>
             <ToastContainer autoClose={1000} closeOnClick />
             <div className="main-allground">
-                {ground.photos.map((photo, index) => (
-                    <img key={index} src={photo.photourl} alt={`img${index}`} />
-                ))}
-
+                <Slider {...settings}>
+                    {ground.photos.map((photo, index) => (
+                        <img key={index} src={photo.photourl} alt={`img${index}`} />
+                    ))}
+                </Slider>
                 <div className="allground-info-div">
                     <div className="allground-operation">
                         <div className="allground-flex">

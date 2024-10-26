@@ -1495,6 +1495,11 @@ select {
         width: 100%;
     }
 
+    .addground-des,
+    .addground-des-flex {
+        flex-direction: column;
+    }
+
 }
 
 @media screen and (max-width:800px) {
@@ -1773,17 +1778,27 @@ select {
 
 /* ==================add-ground=============================== */
 
+.add-ground-main {
+    display: flex;
+    justify-content: center;
+}
+
 .addground-main {
     justify-content: center;
-    width: 100%;
+    width: 80%;
     display: flex;
-    margin-top: -30px;
+    margin-top: -150px;
+    padding: 20px;
 }
+
 
 .addground-list {
     background-color: white;
-    margin: 20px 60px;
+    margin: 20px auto;
     padding: 40px;
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .addground-title h1 {
@@ -1792,6 +1807,7 @@ select {
     font-weight: bold;
 }
 
+
 .add-list-button-flex button {
     margin: 10px 3px;
 }
@@ -1799,53 +1815,101 @@ select {
 .add-list,
 .add-list-full {
     display: flex;
+    margin-top: 15px;
     flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+.add-list label,
+.add-list-full label {
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.add-list p,
+.add-list-full p {
+    margin-bottom: 0px !important;
 }
 
 .add-list img {
-    width: 200px;
+    width: 100%;
+    max-width: 200px;
 }
 
 .checkbox {
     display: flex;
     gap: 5px;
+    align-items: center;
 }
 
 .back-grounddetails {
     font-size: 28px;
     cursor: pointer;
-    margin-top: -20px;
-    margin-bottom: 20px;
-    margin-left: 220px;
+    margin: 0 auto 20px;
     color: var(--secondary-color);
+    text-align: center;
 }
-
-/* .edit-photo {
-    display: flex;
-} */
 
 .addgrounderror {
     display: flex;
-    font-size: 25px;
+    font-size: 18px;
     color: red;
-    margin: 0 220px;
+    justify-content: center;
+    margin: 10px 0;
 }
 
-.addground-des {
-    display: flex;
-    gap: 20px;
-    margin: 25px 0;
-    align-items: center;
-}
-
+.addground-des,
 .addground-des-flex {
     display: flex;
     gap: 20px;
-    margin: 25px 0;
+    justify-content: space-between;
+    margin: 15px 0;
+    width: 100%;
 }
 
-.add-list-box input {
+.add-list-box input,
+.add-list input,
+.add-list-full textarea,
+.add-list select,
+.add-list-full input,
+.add-list-flex input {
+    width: 100%;
     padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+    outline: none;
+    box-sizing: border-box;
+}
+
+.date {
+    padding: 7px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+    outline: none;
+    width: 100%;
+}
+
+.addground-icon {
+    font-size: 18px;
+    margin-top: 7px;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.add-list button {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+    outline: none;
+    box-sizing: border-box;
+    background-color: white;
+    width: max-content;
+
+    &:hover {
+        background-color: var(--secondary-color);
+        color: white;
+    }
 }
 
 .add-list-flex,
@@ -1853,6 +1917,7 @@ select {
     display: flex;
     gap: 20px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .checkbox input[type=checkbox] {
@@ -1860,44 +1925,66 @@ select {
     height: 20px;
 }
 
-.addground-des-price {
-    margin: 25px 0;
-}
+@media (max-width: 768px) {
 
+    .addground-main,
+    .addground-list {
+        margin: 0 auto;
+        width: 100%;
+        padding: 20px;
+    }
 
-.add-list-box {
-    align-items: center;
-}
+    .addground-title h1 {
+        font-size: 24px;
+    }
 
-.add-list input,
-.add-list-full textarea,
-.add-list select,
-.add-list-full input,
-.add-list-flex input,
-.add-list button {
-    padding: 7px 20px;
-    border-radius: 10px;
-    border: 1px solid var(--primary-color);
-    outline: none;
-}
+    .add-list-flex,
+    .add-list-box,
+    .addground-des,
+    .addground-des-flex {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
 
-.add-list button {
-    background-color: transparent;
-    cursor: pointer;
+    .add-list-box input,
+    .date,
+    .add-list button {
+        width: 100%;
+    }
 
-    &:hover {
-        background-color: var(--secondary-color);
-        color: var(--color);
+    .back-grounddetails {
+        margin: 0;
+        text-align: center;
+        font-size: 24px;
     }
 }
 
-/* .add-list label,
-.add-list-full label {
-    color: var(--secondary-color);
-} */
+
+.slick-dots {
+    display: none;
+}
+
+.main-allground:hover .slick-dots {
+    display: block !important;
+}
+
+.slick-dots li button:before {
+    color: white;
+    font-size: 12px;
+}
+
+.slick-next:before,
+.slick-prev:before {
+    display: none;
+}
 
 .add-list-full {
     width: 100%;
+}
+
+.slick-dots li.slick-active button:before {
+    color: var(--primary-color) !important;
 }
 
 .entry-price button {

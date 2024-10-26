@@ -66,7 +66,8 @@ const Dashboard = () => {
                     console.log("adminShowUserActivityResponse");
                 }
                 if (bookingValueResponse.status === 200) {
-                    setbookingvalue(bookingValueResponse.data?.BookingValue || []);
+                    setbookingvalue(bookingValueResponse.data || []);
+                    console.log("bookingValueResponse", averageBookingValueResponse.data.averageBookingValue);
                 } else {
                     console.log("bookingValueResponse");
                 }
@@ -76,13 +77,14 @@ const Dashboard = () => {
                     console.log("totalBookingResponse");
                 }
                 if (totalRevenueResponse.status === 200) {
-                    settotalrevenue(totalRevenueResponse.data?.totalRevenue);
-                    console.log("totalrevenue", totalRevenueResponse.data?.totalRevenue);
+                    settotalrevenue(totalRevenueResponse.data);
+                    console.log("totalrevenue", totalRevenueResponse.data);
                 } else {
                     console.log("showusererorr");
                 }
                 if (averageBookingValueResponse.status === 200) {
                     setaveragebookingvalue(averageBookingValueResponse.data?.averageBookingValue || []);
+                    console.log("averageBookingValueResponse", averageBookingValueResponse.data.averageBookingValue);
                 } else {
                     console.log("averageBookingValueResponse");
                 }
@@ -368,7 +370,7 @@ const Dashboard = () => {
                                         <YAxis />
                                         <Tooltip />
                                         <Legend />
-                                        <Line type="monotone" dataKey="Average BookingVolume" stroke="#BDE038" fill='#F26835' />
+                                        <Line type="monotone" dataKey="BookingVolume" stroke="#BDE038" fill='#F26835' />
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>

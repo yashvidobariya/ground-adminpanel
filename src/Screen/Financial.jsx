@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../Component/Sidebar'
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Revenuegrowth } from '../service/APIrouter';
+import { Revenuegrowth, Totalrevenue } from '../service/APIrouter';
 import { startOfWeek, format } from 'date-fns';
 import { GlobalApi } from '../service/GlobalApi';
 
@@ -17,11 +17,11 @@ const Financial = () => {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const response = await GlobalApi(totalrevenue, 'POST', null, token);
+                const response = await GlobalApi(Totalrevenue, 'POST', null, token);
 
                 if (response.status === 200) {
                     settotalrevenue(response.data);
-                    console.log("totalrevenue", response.data);
+                    console.log("totalrevenue", response);
                 } else if (response.status === 401) {
                     seterrormessage("Authentication error. Please login as an Admin.");
                     localStorage.removeItem('token');
@@ -129,7 +129,7 @@ const Financial = () => {
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Bar dataKey="totalrevenue" fill="#F26835" />
+                                <Bar dataKey="totalrevenue" fill="#F26835" radius={[10, 10, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
