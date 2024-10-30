@@ -7,6 +7,8 @@ import { useNavigate, useParams } from 'react-router';
 import Lottie from 'lottie-react';
 import loadingdata from '../Data/Playturf.json'
 import { IoArrowBackCircle } from 'react-icons/io5';
+import { FaCircleMinus } from "react-icons/fa6";
+import { FaCirclePlus } from "react-icons/fa6";
 
 const SingleeditGroundlist = () => {
     const [oldPhotos, setOldPhotos] = useState([]);
@@ -16,6 +18,7 @@ const SingleeditGroundlist = () => {
     const navigate = useNavigate();
     const { userId } = useParams();
     const [formdata, setformdata] = useState({
+        ownerid: '',
         groundname: '',
         ownername: '',
         description: '',
@@ -28,9 +31,19 @@ const SingleeditGroundlist = () => {
         sport_type: [],
         photos: [],
         baseprice: '',
-        price: [
-            { weekday: '', start_time: '', end_time: '', price: '' },
-            { date: '', start_time: '', end_time: '', price: '' }
+        weekdayPrice: [
+            { wd_starttime: '', wd_endtime: '', price: 0 }
+        ],
+        weekendPrice: [
+            { wd_starttime: '', wd_endtime: '', price: 0 }
+        ],
+        eventPrices: [
+            {
+                date: '',
+                timeSlot: [
+                    { wd_starttime: '', wd_endtime: '', price: 0 }
+                ]
+            }
         ],
         starttime: '',
         endtime: ''
@@ -68,19 +81,52 @@ const SingleeditGroundlist = () => {
         }
     };
 
-    const handlePriceChange = (e, index) => {
+    const handlePriceChange = (e, index, type, timeSlotIndex = null) => {
         const { name, value } = e.target;
-        const updatedPrices = formdata.price.map((priceEntry, i) => {
-            if (index === i) {
-                return { ...priceEntry, [name]: value };
-            }
-            return priceEntry;
-        });
 
-        setformdata(prevFormdata => ({
-            ...prevFormdata,
-            price: updatedPrices
-        }));
+        if (type === 'weekday') {
+            const updatedPrices = formdata.weekdayPrice.map((priceEntry, i) => {
+                if (index === i) {
+                    return { ...priceEntry, [name]: value };
+                }
+                return priceEntry;
+            });
+
+            setformdata(prevFormdata => ({
+                ...prevFormdata,
+                weekdayPrice: updatedPrices
+            }));
+        } else if (type === 'weekend') {
+            const updatedPrices = formdata.weekendPrice.map((priceEntry1, i) => {
+                if (index === i) {
+                    return { ...priceEntry1, [name]: value };
+                }
+                return priceEntry1;
+            });
+
+            setformdata(prevFormdata => ({
+                ...prevFormdata,
+                weekendPrice: updatedPrices
+            }));
+        } else if (type === 'event') {
+            const updatedEvents = formdata.eventPrices.map((event, i) => {
+                if (index === i) {
+                    const updatedTimeSlots = event.timeSlot.map((slot, j) => {
+                        if (timeSlotIndex === j) {
+                            return { ...slot, [name]: value };
+                        }
+                        return slot;
+                    });
+                    return { ...event, timeSlot: updatedTimeSlots };
+                }
+                return event;
+            });
+
+            setformdata(prevFormdata => ({
+                ...prevFormdata,
+                eventPrices: updatedEvents
+            }));
+        }
     };
 
     const handlesubmit = async (e) => {
@@ -102,6 +148,7 @@ const SingleeditGroundlist = () => {
                 }
             });
 
+            console.log("Submitting form with ownerid:", formDataToSend);
             const response = await fetch(`${Admineditground}/${userId}`, {
                 method: 'POST',
                 headers: {
@@ -130,7 +177,6 @@ const SingleeditGroundlist = () => {
         }
     };
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -139,18 +185,27 @@ const SingleeditGroundlist = () => {
 
                 if (response.status === 200) {
                     const data = response.data;
+                    console.log("data", data);
 
-                    const formattedPrices = data.ground.price.map(priceEntry => {
-                        if (priceEntry.date) {
-                            const formattedDate = new Date(priceEntry.date).toISOString().split('T')[0];
-                            console.log("date", formattedDate);
-                            return { ...priceEntry, date: formattedDate };
+                    function convertToTimeFormat(time) {
+                        console.log("time", time);
+                        if (typeof time === 'string' && time.includes(':')) {
+                            const [hours, minutes] = time.split(':');
+                            return `${hours}:${minutes}`;
+                        } else {
+                            return '00:00';
                         }
-                        return priceEntry;
-                    });
+                    }
+
+                    function convertToDateFormat(dateStr) {
+                        const [day, month, year] = dateStr.split(':');
+                        return `${day}-${month}-${year}`;
+                    }
+
 
                     setOldPhotos(data?.ground.photos || []);
                     setformdata({
+                        ownerid: data?.ground.ownerid || '',
                         groundname: data?.ground.groundname || '',
                         ownername: data?.ground.ownername || '',
                         description: data?.ground.description || '',
@@ -163,17 +218,39 @@ const SingleeditGroundlist = () => {
                         facilities: data?.ground.facilities || [],
                         baseprice: data?.ground.baseprice || '',
                         photos: data?.ground.photos || [],
-                        price: formattedPrices || [
-                            { weekday: '', start_time: '', end_time: '', price: '' },
-                            { date: '', start_time: '', end_time: '', price: '' }
-                        ],
-                        starttime: data?.ground.starttime || '',
-                        endtime: data?.ground.endtime || ''
+
+                        weekdayPrice: data?.ground?.weekdayPrice?.map(price => ({
+                            wd_starttime: convertToTimeFormat(price.wd_starttime) || '',
+                            wd_endtime: convertToTimeFormat(price.wd_endtime) || '',
+                            price: price.price || 0
+                        })) || [{ wd_starttime: '', wd_endtime: '', price: 0 }],
+
+                        weekendPrice: data?.ground?.weekendPrice?.map(price1 => ({
+                            wd_starttime: convertToTimeFormat(price1.wd_starttime) || '',
+                            wd_endtime: convertToTimeFormat(price1.wd_endtime) || '',
+                            price: price1.price || 0
+                        })) || [{ wd_starttime: '', wd_endtime: '', price: 0 }],
+
+                        eventPrices: data?.ground?.eventPrices?.map(event => ({
+                            date: convertToDateFormat(event.date) || '',
+                            timeSlot: event.timeSlot?.map(slot => ({
+                                wd_starttime: convertToTimeFormat(slot.wd_starttime) || '',
+                                wd_endtime: convertToTimeFormat(slot.wd_endtime) || '',
+                                price: slot.price || 0
+                            })) || [{ wd_starttime: '', wd_endtime: '', price: 0 }]
+                        })) || [{
+                            date: '',
+                            timeSlot: [{ wd_starttime: '', wd_endtime: '', price: 0 }]
+                        }],
+                        starttime: convertToTimeFormat(data?.ground.starttime || '00:00'),
+                        endtime: convertToTimeFormat(data?.ground.endtime || '00:00')
                     });
                     console.log("response", response);
                     setUserData(data);
-
-                    console.log("data", data);
+                    console.log("Event Prices:", formdata.eventPrices);
+                    console.log("weekday Prices:", formdata.weekdayPrice);
+                    console.log("weekend Prices:", formdata.weekendPrice);
+                    console.log("data", convertToTimeFormat(data?.ground.starttime || '00:00'),);
                 } else {
                     console.error('failed to fetch');
                 }
@@ -201,18 +278,12 @@ const SingleeditGroundlist = () => {
     };
     return (
         <>
+            <ToastContainer autoClose={3000} closeOnClick />
             <Sidebar />
             <div className='back-grounddetails' onClick={handleBackClick}>
                 <IoArrowBackCircle />
             </div>
-            <ToastContainer autoClose={1000} closeOnClick />
-            {loading ? (
-                <div className="loader">
-                    <div className="loading-icon">
-                        <Lottie animationData={loadingdata} />
-                    </div>
-                </div>
-            ) : (
+            <div className="add-ground-main">
                 <div className="addground-main">
                     <div className="addground-list">
                         <div className="addground-title">
@@ -220,17 +291,25 @@ const SingleeditGroundlist = () => {
                         </div>
 
                         <div className="addground-des">
-                            <div className="add-list-full">
-                                <label>Owner Name</label>
-                                <input type='text' placeholder='Enter Owner name' name='ownername' onChange={handlechange} value={formdata.ownername} />
-                            </div>
-
-                            <div className="add-list-full">
+                            <div className="add-list">
                                 <label>Ground Name</label>
                                 <input type='text' placeholder='Enter Ground name' name='groundname' onChange={handlechange} value={formdata.groundname} />
+
                             </div>
 
-                            <div className="add-list-full">
+                            {/* <div className="add-list">
+                                <label htmlFor="mobile">Mobile Number</label>
+                                <Select
+                                    id="mobile"
+                                    name="mobile"
+                                    value={selectedOption || ''}
+                                    onChange={handleChange}
+                                    options={contacts}
+                                    placeholder="Select a Contact"
+                                ></Select>
+                            </div> */}
+
+                            <div className="add-list">
                                 <label>Base Price</label>
                                 <input type='number' placeholder='Enter price ' name='baseprice' onChange={handlechange} value={formdata.baseprice || ''} />
                             </div>
@@ -244,51 +323,30 @@ const SingleeditGroundlist = () => {
                         </div>
 
                         <div className="addground-des">
-
                             <div className="add-list">
-                                <label htmlFor="state">State</label>
-                                <input type='text' placeholder='Enter state' name='state' onChange={handlechange} value={formdata.state} />
+                                <label>Location</label>
+                                <input type='text' placeholder='Enter location' name='location' onChange={handlechange} value={formdata.location} />
                             </div>
 
                             <div className="add-list">
-                                <label>Ground Photos</label>
-
-
-                                <button type="button" onClick={() => document.getElementById('fileInput').click()}>Choose Files</button>
-                                <input
-                                    type="file"
-                                    id="fileInput"
-                                    name="photos"
-                                    onChange={handlechange}
-                                    multiple
-                                    style={{ display: 'none' }}
-                                />
-                            </div>
-                            <div className="add-list">
-                                {newPhotos.length > 0 ? (
-                                    <div className="photo-preview">
-                                        {newPhotos.map((photo, index) => (
-                                            <img key={index} src={photo} alt={`img${index}`} />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="photo-preview">
-                                        {oldPhotos.map((photo, index) => (
-                                            <img key={index} src={photo.photourl} alt={`img${index}`} />
-                                        ))}
-                                    </div>
-                                )}
+                                <label>State</label>
+                                <select id="state" name="state" onChange={handlechange} value={formdata.state}>
+                                    <option value="" disabled>Select a state</option>
+                                    <option value="Gujrat">Gujrat</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                </select>
                             </div>
 
                             <div className="add-list">
-                                <label>Start Time</label>
-                                <input type="time" name='starttime' onChange={handlechange} value={formdata.starttime} />
+                                <label>Country</label>
+                                <select id="state" name="country" onChange={handlechange} value={formdata.country}>
+                                    <option value="" disabled>Select a country</option>
+                                    <option value="India">India</option>
+                                    <option value="USA">USA</option>
+                                    <option value="Canada">Canada</option>
+                                </select>
                             </div>
 
-                            <div className="add-list">
-                                <label>End Time</label>
-                                <input type="time" name='endtime' onChange={handlechange} value={formdata.endtime} />
-                            </div>
 
                         </div>
 
@@ -300,18 +358,18 @@ const SingleeditGroundlist = () => {
 
                             <div className="add-list-full">
                                 <label>Rules And Regulation</label>
-                                <textarea rows="3" cols="30" placeholder='Enter Rules and Regulation' name='rulesandregulation' onChange={handlechange} value={formdata.rulesandregulation || '-'} />
+                                <textarea rows="3" cols="30" placeholder='Enter Rules and Regulation' name='rulesandregulation' onChange={handlechange} value={formdata.rulesandregulation} />
                             </div>
                         </div>
 
                         <div className="addground-des-flex">
+
                             <div className="add-list">
                                 <label>Facilities</label>
                                 <div className="add-list-box">
                                     <input type='text' placeholder='Enter facilities' name='facilities' onChange={handlechange} value={formdata.facilities || '-'} />
                                 </div>
                             </div>
-
 
                             <div className="add-list">
                                 <label>Sport Types</label>
@@ -321,31 +379,172 @@ const SingleeditGroundlist = () => {
                             </div>
 
                             <div className="add-list">
-                                <label>Location</label>
-                                <input type='text' placeholder='Enter location' name='location' onChange={handlechange} value={formdata.location} />
+                                <label>Ground Start Time</label>
+                                <input type="time" placeholder="Start_time" name='starttime' onChange={handlechange} value={formdata.starttime} />
+                            </div>
+
+                            <div className="add-list">
+                                <label>Ground End Time</label>
+                                <input type="time" name='endtime' onChange={handlechange} value={formdata.endtime} />
+                            </div>
+                        </div>
+                        <div className="add-list">
+                            <label>Ground Photos</label>
+
+
+                            <button type="button" onClick={() => document.getElementById('fileInput').click()}>Choose Files</button>
+                            <input
+                                type="file"
+                                id="fileInput"
+                                name="photos"
+                                onChange={handlechange}
+                                multiple
+                                style={{ display: 'none' }}
+                            />
+                        </div>
+                        <div className="add-list">
+                            {newPhotos.length > 0 ? (
+                                <div className="photo-preview">
+                                    {newPhotos.map((photo, index) => (
+                                        <img key={index} src={photo} alt={`img${index}`} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="photo-preview">
+                                    {oldPhotos.map((photo, index) => (
+                                        <img key={index} src={photo.photourl} alt={`img${index}`} />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="addground-des-flex">
+                            <div className="add-list">
+                                {formdata.weekdayPrice.map((priceEntry, index) => (
+                                    <div className="add-list" key={index}>
+                                        <label>Weekday Price</label>
+
+                                        <div className="add-list-flex">
+                                            <div className="add-list" >
+                                                <p>Start Time</p>
+                                                <input
+                                                    type="time" placeholder="Start time" name="wd_starttime" value={priceEntry.wd_starttime} onChange={(e) => handlePriceChange(e, index, 'weekday')}
+                                                />
+                                            </div>
+                                            <div className="add-list" >
+                                                <p>End Time</p>
+                                                <input type="time" name="wd_endtime" value={priceEntry.wd_endtime} onChange={(e) => handlePriceChange(e, index, 'weekday')}
+                                                />
+                                            </div>
+                                            <div className="add-list" >
+                                                <p>Price</p>
+                                                <input type="number" name="price" placeholder="Enter price" value={priceEntry.price} onChange={(e) => handlePriceChange(e, index, 'weekday')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="add-list">
+                                {formdata.weekendPrice.map((priceEntry1, index) => (
+                                    <div className="add-list" key={index}>
+                                        <label>Weekend Price</label>
+                                        <div className="add-list-flex">
+                                            <div className="add-list">
+                                                <p>Start Time</p>
+                                                <input
+                                                    type="time"
+                                                    placeholder="Start time"
+                                                    name="wd_starttime"
+                                                    value={priceEntry1.wd_starttime || ''}
+                                                    onChange={(e) => handlePriceChange(e, index, 'weekend')}
+                                                />
+                                            </div>
+                                            <div className="add-list">
+                                                <p>End Time</p>
+                                                <input
+                                                    type="time"
+                                                    name="wd_endtime"
+                                                    value={priceEntry1.wd_endtime || ''}
+                                                    onChange={(e) => handlePriceChange(e, index, 'weekend')}
+                                                />
+                                            </div>
+                                            <div className="add-list">
+                                                <p>Price</p>
+                                                <input
+                                                    type="number"
+                                                    name="price"
+                                                    placeholder="Enter price"
+                                                    value={priceEntry1.price || ''}
+                                                    onChange={(e) => handlePriceChange(e, index, 'weekend')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="add-list">
+                                <label>Event Prices</label>
+                                {formdata.eventPrices.map((event, eventIndex) => (
+                                    <div className="add-list-box" key={eventIndex}>
+                                        <div className="add-list">
+                                            <p>Date</p>
+                                            <input
+                                                type="date"
+                                                className="date"
+                                                name="date"
+                                                value={event.date}
+                                                onChange={(e) => {
+                                                    const updatedEvents = formdata.eventPrices.map((ev, i) => {
+                                                        if (i === eventIndex) {
+                                                            return { ...ev, date: e.target.value };
+                                                        }
+                                                        return ev;
+                                                    });
+                                                    setformdata(prevFormdata => ({
+                                                        ...prevFormdata,
+                                                        eventPrices: updatedEvents
+                                                    }));
+                                                }}
+                                            />
+                                        </div>
+                                        {event.timeSlot.map((slot, timeSlotIndex) => (
+                                            <div className="add-list-flex" key={timeSlotIndex}>
+                                                <div className="add-list">
+                                                    <p>Start Time</p>
+                                                    <input
+                                                        type="time"
+                                                        name="wd_starttime"
+                                                        value={slot.wd_starttime}
+                                                        onChange={(e) => handlePriceChange(e, eventIndex, 'event', timeSlotIndex)}
+                                                    />
+                                                </div>
+                                                <div className="add-list">
+                                                    <p>End Time</p>
+                                                    <input
+                                                        type="time"
+                                                        name="wd_endtime"
+                                                        value={slot.wd_endtime}
+                                                        onChange={(e) => handlePriceChange(e, eventIndex, 'event', timeSlotIndex)}
+                                                    />
+                                                </div>
+                                                <div className="add-list">
+                                                    <p>Price</p>
+                                                    <input
+                                                        type="number"
+                                                        name="price"
+                                                        value={slot.price}
+                                                        onChange={(e) => handlePriceChange(e, eventIndex, 'event', timeSlotIndex)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
                             </div>
                         </div>
 
-                        <div className="addground-des-price">
-                            {formdata.price.map((priceEntry, index) => (
-                                <div className="add-list" key={index}>
-                                    <label>{index === 0 ? "Price Entry 1" : "Price Entry 2"}</label>
-                                    <div className="add-list-flex">
-                                        <input type="number" name='price' onChange={(e) => handlePriceChange(e, index)} value={priceEntry.price} />
-                                        {index === 0 && (
-                                            <input type="text" name='weekday' onChange={(e) => handlePriceChange(e, index)} value={priceEntry.weekday} />
-                                        )}
-                                        {index === 1 && (
-                                            <>
-                                                <input type="date" name='date' onChange={(e) => handlePriceChange(e, index)} value={priceEntry.date} />
-                                            </>
-                                        )}
-                                        <input type="time" name='start_time' onChange={(e) => handlePriceChange(e, index)} value={priceEntry.start_time} />
-                                        <input type="time" name='end_time' onChange={(e) => handlePriceChange(e, index)} value={priceEntry.end_time} />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
 
                         <div className="addground-submit">
                             <button onClick={handlesubmit} className='ground-update'>Update</button>
@@ -353,7 +552,7 @@ const SingleeditGroundlist = () => {
                         </div>
                     </div>
                 </div >
-            )}
+            </div>
         </>
     );
 }

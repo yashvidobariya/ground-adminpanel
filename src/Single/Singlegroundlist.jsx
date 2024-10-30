@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { MdOutlineEditNote } from "react-icons/md";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { GlobalApi } from '../service/GlobalApi';
-import { Admindeleteground, Admineditground } from '../service/APIrouter';
+import { Admindeleteground, Admineditground, Getoneground } from '../service/APIrouter';
 import { useNavigate } from 'react-router';
 import Popup from '../Dialogbox/Popup';
 import { ToastContainer, toast } from 'react-toastify';
@@ -15,27 +15,30 @@ const Singlegroundlist = ({ ground }) => {
     const [userToDelete, setUserToDelete] = useState(null);
     const Navigate = useNavigate();
 
-    const handleedit = async (userId) => {
+    const handleedit = async (ground) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await GlobalApi(`${Admineditground}/${userId}`, 'POST', null, token);
+            console.log("ground", ground);
+            const groundId = ground._id;
+            const data = ground.ownerid;
+            console.log("groundid", groundId);
+            console.log("data", data);
+            const response = await GlobalApi(`${Getoneground}/${groundId}`, 'GET', null, token);
 
             if (response.status === 200) {
                 const userData = response.data;
                 console.log(userData);
-                Navigate(`/venue/edit/${userId}`);
+                Navigate(`/venue/edit/${groundId}`);
             }
-            console.log("ID", userId);
+            console.log("ID", groundId);
         } catch (error) {
             console.error('Error', error);
         }
     };
 
-
     const togglePopup = () => {
         setIsOpen(!isOpen);
     };
-
 
     const handledelete = async (userId) => {
         try {
@@ -87,7 +90,7 @@ const Singlegroundlist = ({ ground }) => {
                             </div>
 
                             <div className="allground-edit">
-                                <p><MdOutlineEditNote onClick={() => handleedit(ground._id)} /></p>
+                                <p><MdOutlineEditNote onClick={() => handleedit(ground)} /></p>
                             </div>
 
 
